@@ -1,4 +1,4 @@
-﻿namespace echo_canceler
+﻿namespace echo_canceller
 {
     partial class MainWindow
     {

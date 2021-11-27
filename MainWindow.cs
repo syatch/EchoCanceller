@@ -12,7 +12,7 @@ using System.Windows.Forms;
 using System.Diagnostics; // debug write
 using System.Threading;
 
-namespace echo_canceler
+namespace echo_canceller
 {
     public partial class MainWindow : Form
     {
