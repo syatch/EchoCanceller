@@ -1,4 +1,4 @@
-﻿namespace eco_canceler
+﻿namespace echo_canceler
 {
     partial class MainWindow
     {
@@ -268,6 +268,6 @@
         private System.Windows.Forms.Label labelStereoMixer;
         private System.Windows.Forms.ComboBox comboBoxStereoMixer;
         private System.Windows.Forms.Label labelStreamTest;
-    }   
+    }
 }
 

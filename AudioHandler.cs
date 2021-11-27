@@ -11,7 +11,7 @@ using System.Threading;
 using System.IO;
 //using System.Drawing; // 
 
-namespace eco_canceler
+namespace echo_canceler
 {
     class AudioHandler
     {

@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 using System.Diagnostics; // write line
 
-namespace eco_canceler
+namespace echo_canceler
 {
     static class Program
     {
