@@ -8,6 +8,7 @@ using NAudio.Wave; // for WaveIn
 using NAudio.Wave.SampleProviders; // for WaveIn
 using System.Diagnostics; // debug write
 using System.Threading;
+using System.IO;
 
 namespace eco_canceler
 {
@@ -17,6 +18,8 @@ namespace eco_canceler
         private int outputDeviceIndex;
         private WaveInEvent waveIn;
         private WaveOut waveOut = new WaveOut();
+        WaveFileWriter writer;
+        AudioFileReader reader;
         public STATE state = STATE.DEFAULT;
         private const int testWaitTime = 5000; // msec
         public enum STATE
@@ -29,6 +32,21 @@ namespace eco_canceler
         public AudioHandler()
         {
             waveIn = new WaveInEvent();
+
+            // record when data available
+            waveIn.DataAvailable += (s, a) =>
+            {
+                writer.Write(a.Buffer, 0, a.BytesRecorded);
+            };
+
+            // record ending func
+            waveIn.RecordingStopped += (s, a) =>
+            {
+                writer.Flush();
+                writer.Dispose();
+                writer = null;
+                waveIn.Dispose();
+            };
         }
         ~AudioHandler()
         {
@@ -102,23 +120,7 @@ namespace eco_canceler
         public void RecordTestAudioStart()
         {
             waveIn.DeviceNumber = inputDeviceIndex;
-            var writer =  new WaveFileWriter("./sounds/test.wav", waveIn.WaveFormat);
-
-            // record when data available
-            waveIn.DataAvailable += (s, a) =>
-            {
-                writer.Write(a.Buffer, 0, a.BytesRecorded);
-            };
-
-            // record ending func
-            waveIn.RecordingStopped += (s, a) =>
-            {
-                Debug.WriteLine("end recording");
-                writer.Flush();
-                writer.Dispose();
-                writer = null;
-                waveIn.Dispose();
-            };
+            writer =  new WaveFileWriter("./sounds/test.wav", waveIn.WaveFormat);
 
             state = STATE.RECORDING;
             
@@ -133,7 +135,8 @@ namespace eco_canceler
             Task task_silence = Task.Run(() => {
                 Debug.WriteLine("play silence");
                 PlaySilence();
-            });*/
+            });
+            */
 
             Task waitRecord = Task.Run(() => {
                 Thread.Sleep(testWaitTime);
@@ -151,13 +154,16 @@ namespace eco_canceler
         public void PlayTestAudio()
         {
             waveOut.DeviceNumber = outputDeviceIndex;
-            var reader = new AudioFileReader("./sounds/test.wav");
+            reader = new AudioFileReader("./sounds/test.wav");
             waveOut.Init(reader);
+            Debug.WriteLine("play recorded sound");
             waveOut.Play();
-            
             state = STATE.PLAYING;
             Task waitRecord = Task.Run(() => {
                 Thread.Sleep(testWaitTime);
+                reader.Flush();
+                reader.Dispose();
+                reader = null;
                 state = STATE.DEFAULT;
             });
 

@@ -88,7 +88,7 @@ namespace eco_canceler
         private void buttonTest_Click(object sender, EventArgs e)
         {
             testing = !testing;
-            if (testing)
+            if (buttonTest.Text == "Test")
             {
                 buttonTest.Text = "Testing...";
                 labelTest.Text = "Device test : Speak something...";
@@ -116,6 +116,7 @@ namespace eco_canceler
                 buttonTest.Text = "Test";
             }
             AudioHandler.StopTestAudio();
+            Debug.WriteLine("end testing");
         }
 
 
