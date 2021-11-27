@@ -18,6 +18,7 @@ namespace eco_canceler
     {
         private bool canceller_function = false;
         private bool testing = false;
+        private bool streaming = false;
         AudioHandler AudioHandler = new AudioHandler();
         public MainWindow()
         {
@@ -25,6 +26,20 @@ namespace eco_canceler
             GetMicInfo();
         }
   
+        private void EnableConboBox()
+        {
+            comboBoxMicrophone.Enabled = true;
+            comboBoxStereoMixer.Enabled = true;
+            comboBoxOutputDevice.Enabled = true;
+        }
+
+        private void DisableConboBox()
+        {
+            comboBoxMicrophone.Enabled = false;
+            comboBoxStereoMixer.Enabled = false;
+            comboBoxOutputDevice.Enabled = false;
+        }
+
         private void GetMicInfo()
         {
             //var AudioHandler = new AudioHandler();
@@ -32,9 +47,13 @@ namespace eco_canceler
             // Update input device list
             var InputDeviceList = AudioHandler.GetInputDeviceList();
             for (int i = 0; i < InputDeviceList.Count; i++)
-                comboBoxInputDevice.Items.Add(InputDeviceList[i]);
-            comboBoxInputDevice.SelectedIndex = 0;
-            
+            {
+                comboBoxMicrophone.Items.Add(InputDeviceList[i]);
+                comboBoxStereoMixer.Items.Add(InputDeviceList[i]);
+            }
+            comboBoxMicrophone.SelectedIndex = 0;
+            comboBoxStereoMixer.SelectedIndex = 0;
+
             // Update output device list
             var OutputDeviceList = AudioHandler.GetOutputDeviceList();
             for (int i = 0; i < OutputDeviceList.Count; i++)
@@ -50,8 +69,13 @@ namespace eco_canceler
         /// <param name="e"></param>
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            label3.Text = "Selected Input Item : " + comboBoxInputDevice.SelectedItem.ToString();
-            AudioHandler.SetInputDeviceIndex(comboBoxInputDevice.SelectedIndex);
+            label3.Text = "Selected Input Item : " + comboBoxMicrophone.SelectedItem.ToString();
+            AudioHandler.SetInputDeviceIndex(comboBoxMicrophone.SelectedIndex);
+        }
+
+        private void comboBoxStereoMixer_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            AudioHandler.SetStereoMixerIndex(comboBoxStereoMixer.SelectedIndex);
         }
 
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
@@ -82,9 +106,13 @@ namespace eco_canceler
             if (canceller_function) {
                 buttonWork.Text = "End";
                 buttonTest.Enabled = false;
+                buttonStream.Enabled = false;
+                DisableConboBox();
             } else {
                 buttonWork.Text = "Start";
                 buttonTest.Enabled = true;
+                buttonStream.Enabled = true;
+                EnableConboBox();
             }
         }
 
@@ -95,8 +123,10 @@ namespace eco_canceler
             {
                 buttonTest.Enabled = false;
                 buttonWork.Enabled = false;
+                buttonStream.Enabled = false;
+                DisableConboBox();
                 buttonTest.Text = "Testing...";
-                labelTest.Text = "Device test : Speak something...";
+                labelTest.Text = "Device Test : Speak something...";
                 AudioHandler.RecordTestAudioStart();
 
                 while (AudioHandler.state == AudioHandler.STATE.WAIT) {
@@ -106,7 +136,7 @@ namespace eco_canceler
 
                 AudioHandler.RecordTestAudioEnd();
 
-                labelTest.Text = "Device test : Now playing...";
+                labelTest.Text = "Device Test : Now playing...";
                 AudioHandler.PlayTestAudio();
 
                 while (AudioHandler.state == AudioHandler.STATE.WAIT)
@@ -115,35 +145,37 @@ namespace eco_canceler
                     Thread.Sleep(10);
                 };
                 AudioHandler.StopTestAudio();
-                labelTest.Text = "Device test : Not testing";
+                labelTest.Text = "Device Test : Not testing";
                 buttonTest.Text = "Test";
                 Debug.WriteLine("end testing");
             }
             buttonTest.Enabled = true;
             buttonWork.Enabled = true;
+            buttonStream.Enabled = true;
+            EnableConboBox();
         }
 
+        private void buttonStream_Click(object sender, EventArgs e)
+        {
+            streaming = !streaming;
 
-        /* private void GetAudioWave()
-         {
-             WaveChannel32 wave = new WaveChannel32(new WaveFileReader(txtWave.Text));
-             int sampleSize = 1024;
-             var bufferSize = 16384 * sampleSize;
-             var buffer = new byte[bufferSize];
-             int read = 0;
-             chart1.Series.Add("wave");
-             chart1.Series["wave"].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastLine;
-             chart1.Series["wave"].ChartArea = "ChartArea1";
-             while (wave.Position < wave.Length)
-             {
-                 read = wave.Read(buffer, 0, bufferSize);
-                 for (int i = 0; i < read / sampleSize; i++)
-                 {
-                     var point = BitConverter.ToSingle(buffer, i * sampleSize);
+            if (streaming)
+            {
+                buttonStream.Text = "Streaming";
+                buttonTest.Enabled = false;
+                buttonWork.Enabled = false;
+                DisableConboBox();
+                AudioHandler.StartStreaming();
+            }
+            else
+            {
+                buttonStream.Text = "Stream";
+                buttonTest.Enabled = true;
+                buttonWork.Enabled = true;
+                EnableConboBox();
+                AudioHandler.EndStreaming();
+            }
+        }
 
-                     chart1.Series["wave"].Points.Add(point);
-                 }
-             }
-         }*/
     }
 }

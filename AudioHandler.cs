@@ -5,22 +5,28 @@ using System.Text;
 using System.Threading.Tasks;
 
 using NAudio.Wave; // for WaveIn
-using NAudio.Wave.SampleProviders; // for WaveIn
+using NAudio.CoreAudioApi;
 using System.Diagnostics; // debug write
 using System.Threading;
 using System.IO;
+//using System.Drawing; // 
 
 namespace eco_canceler
 {
     class AudioHandler
     {
-        private int inputDeviceIndex;
+        private int micDeviceIndex;
+        private int stereoMixerIndex;
         private int outputDeviceIndex;
-        private WaveInEvent waveIn;
+        private WaveInEvent waveMic;
+        private WaveInEvent waveStereo;
         private WaveOut waveOut = new WaveOut();
+        public int volumeGain = 0;
         WaveFileWriter writer;
         AudioFileReader reader;
+        BufferedWaveProvider bufferedWaveProvider;
         public STATE state = STATE.DEFAULT;
+        private bool streaming = false;
         private const int testWaitTime = 5000; // msec
         public enum STATE
         {
@@ -30,22 +36,30 @@ namespace eco_canceler
 
         public AudioHandler()
         {
-            waveIn = new WaveInEvent();
+            waveMic = new WaveInEvent();
+            waveStereo = new WaveInEvent();
 
-            waveIn.WaveFormat = new WaveFormat(sampleRate: 48000, channels: 2);
+            waveMic.WaveFormat = new WaveFormat(44100, 16, 2);
             // record when data available
-            waveIn.DataAvailable += (s, a) =>
+            waveMic.DataAvailable += (s, a) =>
             {
-                writer.Write(a.Buffer, 0, a.BytesRecorded);
+                if (writer != null)
+                    writer.Write(a.Buffer, 0, a.BytesRecorded);
             };
+            waveMic.DataAvailable += WaveIn_DataAvailable;
+            
+            waveStereo.WaveFormat = new WaveFormat(44100, 16, 2);
 
             // record ending func
-            waveIn.RecordingStopped += (s, a) =>
+            waveMic.RecordingStopped += (s, a) =>
             {
-                writer.Flush();
-                writer.Dispose();
-                writer = null;
-                waveIn.Dispose();
+                if (writer != null)
+                {
+                    writer.Flush();
+                    writer.Dispose();
+                    writer = null;
+                }
+                waveMic.Dispose();
             };
         }
         ~AudioHandler()
@@ -89,7 +103,16 @@ namespace eco_canceler
         /// <param name="Index"></param>
         public void SetInputDeviceIndex(int Index)
         {
-            inputDeviceIndex = Index;
+            micDeviceIndex = Index;
+        }
+
+        /// <summary>
+        /// set stereo mixer
+        /// </summary>
+        /// <param name="Index"></param>
+        public void SetStereoMixerIndex(int Index)
+        {
+            stereoMixerIndex = Index;
         }
 
         /// <summary>
@@ -103,14 +126,14 @@ namespace eco_canceler
 
         public void RecordTestAudioStart()
         {
-            waveIn.DeviceNumber = inputDeviceIndex;
-            writer =  new WaveFileWriter("./sounds/test.wav", waveIn.WaveFormat);
+            waveMic.DeviceNumber = micDeviceIndex;
+            writer =  new WaveFileWriter("./sounds/test.wav", waveMic.WaveFormat);
 
             state = STATE.WAIT;
             
             // record in other thread
             Task task_record = Task.Run(() => {
-                waveIn.StartRecording();
+                waveMic.StartRecording();
             });
 
             Task waitRecord = Task.Run(() => {
@@ -122,7 +145,7 @@ namespace eco_canceler
 
         public void RecordTestAudioEnd()
         {
-            waveIn.StopRecording();
+            waveMic.StopRecording();
             waveOut.Stop();
         }
 
@@ -145,33 +168,45 @@ namespace eco_canceler
 
         public void StopTestAudio()
         {
-            waveIn.StopRecording();
+            waveMic.StopRecording();
             waveOut.Stop();
             state = STATE.DEFAULT;
         }
 
 
-        // Debug.WriteLine("button clicked");
-        /*
-        var waveIn = new WaveIn()
+        public void StartStreaming()
         {
-            DeviceNumber = 0, // Default
-        };
-        waveIn.DataAvailable += WaveIn_DataAvailable;
-        waveIn.WaveFormat = new WaveFormat(sampleRate: 8000, channels: 1);
-        waveIn.StartRecording();*/
-        /*
-                private void WaveIn_DataAvailable(object sender, WaveInEventArgs e)
+            waveMic.WaveFormat = new WaveFormat(44100, 16, 2);
+            streaming = true;
+            waveMic.DeviceNumber = micDeviceIndex;
+            waveMic.StartRecording();
+
+            //一般的な44.1kHz, 16bit, ステレオサウンドの音源を想定
+            bufferedWaveProvider = new BufferedWaveProvider(new WaveFormat(44100, 16, 2));
+
+            waveOut.DeviceNumber = outputDeviceIndex;
+            waveOut.Init(bufferedWaveProvider);
+            waveOut.Play();
+        }
+
+        private void WaveIn_DataAvailable(object sender, WaveInEventArgs e)
+        {
+            if (streaming)
+            {/*
+                for (int index = 0; index < e.BytesRecorded; index++)
                 {
-                    // 32bitで最大値1.0fにする
-                    for (int index = 0; index < e.BytesRecorded; index += 2)
-                    {
-                        short sample = (short)((e.Buffer[index + 1] << 8) | e.Buffer[index + 0]);
-
-                        float sample32 = sample / 32768f;
-                        //                ProcessSample(sample32);
-                    }
+                    e.Buffer[index] = e.Buffer[index] * volumeGain;
                 }*/
+                bufferedWaveProvider.AddSamples(e.Buffer, 0, e.BytesRecorded);
+            }
+        }
 
+        public void EndStreaming()
+        {
+            streaming = false;
+            waveMic.StopRecording();
+            waveOut.Stop();
+        }
     }
+
 }
