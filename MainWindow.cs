@@ -79,10 +79,13 @@ namespace eco_canceler
         {
             canceller_function = !canceller_function;
 
-            if (canceller_function)
-                button1.Text = "End";
-            else
-                button1.Text = "Start";
+            if (canceller_function) {
+                buttonWork.Text = "End";
+                buttonTest.Enabled = false;
+            } else {
+                buttonWork.Text = "Start";
+                buttonTest.Enabled = true;
+            }
         }
 
         private void buttonTest_Click(object sender, EventArgs e)
@@ -90,11 +93,13 @@ namespace eco_canceler
             testing = !testing;
             if (buttonTest.Text == "Test")
             {
+                buttonTest.Enabled = false;
+                buttonWork.Enabled = false;
                 buttonTest.Text = "Testing...";
                 labelTest.Text = "Device test : Speak something...";
                 AudioHandler.RecordTestAudioStart();
 
-                while (AudioHandler.state == AudioHandler.STATE.RECORDING) {
+                while (AudioHandler.state == AudioHandler.STATE.WAIT) {
                     Application.DoEvents();
                     Thread.Sleep(10);
                 };
@@ -104,19 +109,18 @@ namespace eco_canceler
                 labelTest.Text = "Device test : Now playing...";
                 AudioHandler.PlayTestAudio();
 
-                while (AudioHandler.state == AudioHandler.STATE.PLAYING)
+                while (AudioHandler.state == AudioHandler.STATE.WAIT)
                 {
                     Application.DoEvents();
                     Thread.Sleep(10);
                 };
-
+                AudioHandler.StopTestAudio();
                 labelTest.Text = "Device test : Not testing";
                 buttonTest.Text = "Test";
-            } else {
-                buttonTest.Text = "Test";
+                Debug.WriteLine("end testing");
             }
-            AudioHandler.StopTestAudio();
-            Debug.WriteLine("end testing");
+            buttonTest.Enabled = true;
+            buttonWork.Enabled = true;
         }
 
 

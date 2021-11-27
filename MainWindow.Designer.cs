@@ -28,76 +28,60 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.comboBoxInputDevice = new System.Windows.Forms.ComboBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
+            this.labelInput = new System.Windows.Forms.Label();
+            this.labelOutput = new System.Windows.Forms.Label();
             this.comboBoxOutputDevice = new System.Windows.Forms.ComboBox();
-            this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
+            this.buttonWork = new System.Windows.Forms.Button();
             this.buttonTest = new System.Windows.Forms.Button();
             this.labelTest = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.SuspendLayout();
             // 
             // comboBoxInputDevice
             // 
             this.comboBoxInputDevice.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxInputDevice.FormattingEnabled = true;
-            this.comboBoxInputDevice.Location = new System.Drawing.Point(12, 47);
+            this.comboBoxInputDevice.Location = new System.Drawing.Point(12, 56);
             this.comboBoxInputDevice.Name = "comboBoxInputDevice";
             this.comboBoxInputDevice.Size = new System.Drawing.Size(776, 32);
             this.comboBoxInputDevice.TabIndex = 3;
             this.comboBoxInputDevice.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
-            // label1
+            // labelInput
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 20);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(205, 24);
-            this.label1.TabIndex = 4;
-            this.label1.Text = "Select Input Device";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
+            this.labelInput.AutoSize = true;
+            this.labelInput.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.labelInput.ForeColor = System.Drawing.SystemColors.InactiveBorder;
+            this.labelInput.Location = new System.Drawing.Point(12, 20);
+            this.labelInput.Name = "labelInput";
+            this.labelInput.Size = new System.Drawing.Size(278, 33);
+            this.labelInput.TabIndex = 4;
+            this.labelInput.Text = "Select Input Device";
+            this.labelInput.Click += new System.EventHandler(this.label1_Click);
             // 
-            // label2
+            // labelOutput
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 113);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(224, 24);
-            this.label2.TabIndex = 5;
-            this.label2.Text = "Select Output Device";
+            this.labelOutput.AutoSize = true;
+            this.labelOutput.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelOutput.ForeColor = System.Drawing.SystemColors.InactiveBorder;
+            this.labelOutput.Location = new System.Drawing.Point(12, 113);
+            this.labelOutput.Name = "labelOutput";
+            this.labelOutput.Size = new System.Drawing.Size(304, 33);
+            this.labelOutput.TabIndex = 5;
+            this.labelOutput.Text = "Select Output Device";
             // 
             // comboBoxOutputDevice
             // 
             this.comboBoxOutputDevice.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxOutputDevice.ForeColor = System.Drawing.SystemColors.WindowText;
             this.comboBoxOutputDevice.FormattingEnabled = true;
-            this.comboBoxOutputDevice.Location = new System.Drawing.Point(12, 140);
+            this.comboBoxOutputDevice.Location = new System.Drawing.Point(12, 145);
             this.comboBoxOutputDevice.Name = "comboBoxOutputDevice";
             this.comboBoxOutputDevice.Size = new System.Drawing.Size(776, 32);
             this.comboBoxOutputDevice.TabIndex = 6;
             this.comboBoxOutputDevice.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
-            // 
-            // chart1
-            // 
-            chartArea2.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea2);
-            legend2.Name = "Legend1";
-            this.chart1.Legends.Add(legend2);
-            this.chart1.Location = new System.Drawing.Point(12, 369);
-            this.chart1.Name = "chart1";
-            series2.ChartArea = "ChartArea1";
-            series2.Legend = "Legend1";
-            series2.Name = "Series1";
-            this.chart1.Series.Add(series2);
-            this.chart1.Size = new System.Drawing.Size(736, 215);
-            this.chart1.TabIndex = 7;
-            this.chart1.Text = "chart1";
             // 
             // label3
             // 
@@ -119,32 +103,38 @@
             this.label4.Text = "label4";
             this.label4.Click += new System.EventHandler(this.label4_Click);
             // 
-            // button1
+            // buttonWork
             // 
-            this.button1.Location = new System.Drawing.Point(566, 739);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(182, 53);
-            this.button1.TabIndex = 10;
-            this.button1.Text = "Start";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.buttonWork.BackColor = System.Drawing.Color.Silver;
+            this.buttonWork.ForeColor = System.Drawing.SystemColors.Info;
+            this.buttonWork.Location = new System.Drawing.Point(606, 749);
+            this.buttonWork.Name = "buttonWork";
+            this.buttonWork.Size = new System.Drawing.Size(182, 53);
+            this.buttonWork.TabIndex = 10;
+            this.buttonWork.Text = "Start";
+            this.buttonWork.UseVisualStyleBackColor = false;
+            this.buttonWork.Click += new System.EventHandler(this.button1_Click);
             // 
             // buttonTest
             // 
-            this.buttonTest.Location = new System.Drawing.Point(636, 197);
+            this.buttonTest.BackColor = System.Drawing.Color.Silver;
+            this.buttonTest.ForeColor = System.Drawing.SystemColors.Info;
+            this.buttonTest.Location = new System.Drawing.Point(636, 204);
             this.buttonTest.Name = "buttonTest";
             this.buttonTest.Size = new System.Drawing.Size(152, 53);
             this.buttonTest.TabIndex = 11;
             this.buttonTest.Text = "Test";
-            this.buttonTest.UseVisualStyleBackColor = true;
+            this.buttonTest.UseVisualStyleBackColor = false;
             this.buttonTest.Click += new System.EventHandler(this.buttonTest_Click);
             // 
             // labelTest
             // 
             this.labelTest.AutoSize = true;
-            this.labelTest.Location = new System.Drawing.Point(22, 211);
+            this.labelTest.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelTest.ForeColor = System.Drawing.SystemColors.InactiveBorder;
+            this.labelTest.Location = new System.Drawing.Point(12, 204);
             this.labelTest.Name = "labelTest";
-            this.labelTest.Size = new System.Drawing.Size(252, 24);
+            this.labelTest.Size = new System.Drawing.Size(345, 33);
             this.labelTest.TabIndex = 12;
             this.labelTest.Text = "Device test : Not testing";
             // 
@@ -152,20 +142,19 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.WindowText;
             this.ClientSize = new System.Drawing.Size(800, 826);
             this.Controls.Add(this.labelTest);
             this.Controls.Add(this.buttonTest);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.buttonWork);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.chart1);
             this.Controls.Add(this.comboBoxOutputDevice);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.labelOutput);
+            this.Controls.Add(this.labelInput);
             this.Controls.Add(this.comboBoxInputDevice);
             this.Name = "MainWindow";
             this.Text = "Simple Echo Canceller";
-            ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -173,13 +162,12 @@
 
         #endregion
         private System.Windows.Forms.ComboBox comboBoxInputDevice;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label labelInput;
+        private System.Windows.Forms.Label labelOutput;
         private System.Windows.Forms.ComboBox comboBoxOutputDevice;
-        private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button buttonWork;
         private System.Windows.Forms.Button buttonTest;
         private System.Windows.Forms.Label labelTest;
     }   

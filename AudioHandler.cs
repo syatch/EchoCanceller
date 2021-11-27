@@ -25,14 +25,14 @@ namespace eco_canceler
         public enum STATE
         {
             DEFAULT,
-            RECORDING,
-            PLAYING,
+            WAIT,
         }
 
         public AudioHandler()
         {
             waveIn = new WaveInEvent();
 
+            waveIn.WaveFormat = new WaveFormat(sampleRate: 48000, channels: 2);
             // record when data available
             waveIn.DataAvailable += (s, a) =>
             {
@@ -101,42 +101,17 @@ namespace eco_canceler
             outputDeviceIndex = Index;
         }
 
-        private void PlaySilence()
-        {
-            var sinesetup = new SignalGenerator()
-            {
-                Gain = 0.0, // 音量
-                Frequency = 440, // 周波数
-                Type = SignalGeneratorType.Sin // Sin波に指定
-            };
-
-            waveOut.Init(sinesetup);
-            waveOut.Play();
-            while (waveOut.PlaybackState == PlaybackState.Playing)
-            {
-                Thread.Sleep(500);
-            }
-        }
         public void RecordTestAudioStart()
         {
             waveIn.DeviceNumber = inputDeviceIndex;
             writer =  new WaveFileWriter("./sounds/test.wav", waveIn.WaveFormat);
 
-            state = STATE.RECORDING;
+            state = STATE.WAIT;
             
             // record in other thread
             Task task_record = Task.Run(() => {
-                Debug.WriteLine("start recording");
                 waveIn.StartRecording();
             });
-
-            // may be not need
-            /*
-            Task task_silence = Task.Run(() => {
-                Debug.WriteLine("play silence");
-                PlaySilence();
-            });
-            */
 
             Task waitRecord = Task.Run(() => {
                 Thread.Sleep(testWaitTime);
@@ -156,9 +131,8 @@ namespace eco_canceler
             waveOut.DeviceNumber = outputDeviceIndex;
             reader = new AudioFileReader("./sounds/test.wav");
             waveOut.Init(reader);
-            Debug.WriteLine("play recorded sound");
             waveOut.Play();
-            state = STATE.PLAYING;
+            state = STATE.WAIT;
             Task waitRecord = Task.Run(() => {
                 Thread.Sleep(testWaitTime);
                 reader.Flush();
