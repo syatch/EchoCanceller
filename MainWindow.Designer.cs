@@ -50,6 +50,8 @@
             this.formsPlotOutRaw = new ScottPlot.FormsPlot();
             this.formsPlotOutFFT = new ScottPlot.FormsPlot();
             this.timerReplot = new System.Windows.Forms.Timer(this.components);
+            this.labeldriver = new System.Windows.Forms.Label();
+            this.comboBoxDriver = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // comboBoxMicrophone
@@ -278,12 +280,36 @@
             this.timerReplot.Interval = 2;
             this.timerReplot.Tick += new System.EventHandler(this.timerReplot_Tick);
             // 
+            // labeldriver
+            // 
+            this.labeldriver.AutoSize = true;
+            this.labeldriver.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labeldriver.ForeColor = System.Drawing.SystemColors.InactiveBorder;
+            this.labeldriver.Location = new System.Drawing.Point(12, 574);
+            this.labeldriver.Name = "labeldriver";
+            this.labeldriver.Size = new System.Drawing.Size(294, 33);
+            this.labeldriver.TabIndex = 31;
+            this.labeldriver.Text = "Select Output Driver";
+            // 
+            // comboBoxDriver
+            // 
+            this.comboBoxDriver.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxDriver.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.comboBoxDriver.FormattingEnabled = true;
+            this.comboBoxDriver.Location = new System.Drawing.Point(18, 623);
+            this.comboBoxDriver.Name = "comboBoxDriver";
+            this.comboBoxDriver.Size = new System.Drawing.Size(776, 32);
+            this.comboBoxDriver.TabIndex = 32;
+            this.comboBoxDriver.SelectedIndexChanged += new System.EventHandler(this.comboBoxDriver_SelectedIndexChanged);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.WindowText;
             this.ClientSize = new System.Drawing.Size(2631, 1426);
+            this.Controls.Add(this.comboBoxDriver);
+            this.Controls.Add(this.labeldriver);
             this.Controls.Add(this.formsPlotOutFFT);
             this.Controls.Add(this.formsPlotOutRaw);
             this.Controls.Add(this.formsPlotStereoFFT);
@@ -333,6 +359,8 @@
         private ScottPlot.FormsPlot formsPlotOutRaw;
         private ScottPlot.FormsPlot formsPlotOutFFT;
         private System.Windows.Forms.Timer timerReplot;
+        private System.Windows.Forms.Label labeldriver;
+        private System.Windows.Forms.ComboBox comboBoxDriver;
     }
 }
 

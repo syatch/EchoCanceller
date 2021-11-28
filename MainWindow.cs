@@ -51,20 +51,25 @@ namespace echo_canceller
             //var AudioHandler = new AudioHandler();
 
             // Update input device list
-            var InputDeviceList = AudioHandler.GetInputDeviceList();
-            for (int i = 0; i < InputDeviceList.Count; i++)
+            var inputDeviceList = AudioHandler.GetInputDeviceList();
+            for (int i = 0; i < inputDeviceList.Count; i++)
             {
-                comboBoxMicrophone.Items.Add(InputDeviceList[i]);
-                comboBoxStereoMixer.Items.Add(InputDeviceList[i]);
+                comboBoxMicrophone.Items.Add(inputDeviceList[i]);
+                comboBoxStereoMixer.Items.Add(inputDeviceList[i]);
             }
             comboBoxMicrophone.SelectedIndex = 0;
             comboBoxStereoMixer.SelectedIndex = 0;
 
             // Update output device list
-            var OutputDeviceList = AudioHandler.GetOutputDeviceList();
-            for (int i = 0; i < OutputDeviceList.Count; i++)
-                comboBoxOutputDevice.Items.Add(OutputDeviceList[i]);
+            var outputDeviceList = AudioHandler.GetOutputDeviceList();
+            for (int i = 0; i < outputDeviceList.Count; i++)
+                comboBoxOutputDevice.Items.Add(outputDeviceList[i]);
             comboBoxOutputDevice.SelectedIndex = 0;
+
+            var driverList = AudioHandler.GetOutputDriverList();
+            for (int i = 0; i < driverList.Count; i++)
+                comboBoxDriver.Items.Add(driverList[i]);
+            comboBoxDriver.SelectedIndex = 0;
 
         }
 
@@ -128,6 +133,11 @@ namespace echo_canceller
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
             AudioHandler.SetOutputDeviceIndex(comboBoxOutputDevice.SelectedIndex);
+        }
+
+        private void comboBoxDriver_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            AudioHandler.SetDriver(comboBoxDriver.SelectedItem.ToString());
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -277,5 +287,6 @@ namespace echo_canceller
         {
             needsAutoScaling = true;
         }
+
     }
 }
