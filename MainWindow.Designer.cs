@@ -28,12 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.comboBoxMicrophone = new System.Windows.Forms.ComboBox();
             this.labelMicrophone = new System.Windows.Forms.Label();
             this.labelOutput = new System.Windows.Forms.Label();
             this.comboBoxOutputDevice = new System.Windows.Forms.ComboBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
             this.buttonWork = new System.Windows.Forms.Button();
             this.buttonTest = new System.Windows.Forms.Button();
             this.labelTest = new System.Windows.Forms.Label();
@@ -50,6 +49,7 @@
             this.formsPlotStereoFFT = new ScottPlot.FormsPlot();
             this.formsPlotOutRaw = new ScottPlot.FormsPlot();
             this.formsPlotOutFFT = new ScottPlot.FormsPlot();
+            this.timerReplot = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // comboBoxMicrophone
@@ -95,26 +95,6 @@
             this.comboBoxOutputDevice.Size = new System.Drawing.Size(776, 32);
             this.comboBoxOutputDevice.TabIndex = 6;
             this.comboBoxOutputDevice.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 318);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(67, 24);
-            this.label3.TabIndex = 8;
-            this.label3.Text = "label3";
-            this.label3.Click += new System.EventHandler(this.label3_Click);
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(12, 342);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(67, 24);
-            this.label4.TabIndex = 9;
-            this.label4.Text = "label4";
-            this.label4.Click += new System.EventHandler(this.label4_Click);
             // 
             // buttonWork
             // 
@@ -235,8 +215,8 @@
             // 
             // formsPlotMicRaw
             // 
-            this.formsPlotMicRaw.BackColor = System.Drawing.Color.White;
-            this.formsPlotMicRaw.ForeColor = System.Drawing.SystemColors.Info;
+            this.formsPlotMicRaw.BackColor = System.Drawing.Color.Transparent;
+            this.formsPlotMicRaw.ForeColor = System.Drawing.SystemColors.WindowText;
             this.formsPlotMicRaw.Location = new System.Drawing.Point(852, 59);
             this.formsPlotMicRaw.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
             this.formsPlotMicRaw.Name = "formsPlotMicRaw";
@@ -293,11 +273,16 @@
             this.formsPlotOutFFT.Size = new System.Drawing.Size(860, 375);
             this.formsPlotOutFFT.TabIndex = 30;
             // 
+            // timerReplot
+            // 
+            this.timerReplot.Interval = 2;
+            this.timerReplot.Tick += new System.EventHandler(this.timerReplot_Tick);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.BackColor = System.Drawing.SystemColors.WindowText;
             this.ClientSize = new System.Drawing.Size(2631, 1426);
             this.Controls.Add(this.formsPlotOutFFT);
             this.Controls.Add(this.formsPlotOutRaw);
@@ -315,8 +300,6 @@
             this.Controls.Add(this.labelTest);
             this.Controls.Add(this.buttonTest);
             this.Controls.Add(this.buttonWork);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.label3);
             this.Controls.Add(this.comboBoxOutputDevice);
             this.Controls.Add(this.labelOutput);
             this.Controls.Add(this.labelMicrophone);
@@ -333,8 +316,6 @@
         private System.Windows.Forms.Label labelMicrophone;
         private System.Windows.Forms.Label labelOutput;
         private System.Windows.Forms.ComboBox comboBoxOutputDevice;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button buttonWork;
         private System.Windows.Forms.Button buttonTest;
         private System.Windows.Forms.Label labelTest;
@@ -351,6 +332,7 @@
         private ScottPlot.FormsPlot formsPlotStereoFFT;
         private ScottPlot.FormsPlot formsPlotOutRaw;
         private ScottPlot.FormsPlot formsPlotOutFFT;
+        private System.Windows.Forms.Timer timerReplot;
     }
 }
 

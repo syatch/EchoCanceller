@@ -22,11 +22,14 @@ namespace echo_canceller
         AudioHandler AudioHandler = new AudioHandler();
         List<ScottPlot.FormsPlot> Plots = new List<ScottPlot.FormsPlot>();
         private readonly int plotNum = 6;
+        public bool needsAutoScaling = true;
+        readonly String[] deviceType = {"Microphone", "StereoMixer", "OutPut"};
         public MainWindow()
         {
             InitializeComponent();
             GetMicInfo();
             SetupGraphLabels();
+            timerReplot.Enabled = true;
         }
   
         private void EnableConboBox()
@@ -73,25 +76,35 @@ namespace echo_canceller
             Plots.Add(formsPlotStereoFFT);
             Plots.Add(formsPlotOutRaw);
             Plots.Add(formsPlotOutFFT);
+
+            int count = 0;
             for (int i = 0; i < plotNum; i++)
             {
+                Plots[i].Configuration
+                Plots[i].Plot.XAxis.Ticks(false);
+                Plots[i].Plot.XAxis.Grid(false);
+                Plots[i].Plot.YAxis.Ticks(false);
+                Plots[i].Plot.YAxis.Grid(false);
+
                 Plots[i].Plot.Style(figureBackground: Color.Black,
                                     dataBackground: Color.Black,
                                     grid: Color.White,
                                     tick: Color.White,
                                     axisLabel: Color.White,
                                     titleLabel: Color.White);
-                switch(i % 2)
+
+                switch (i % 2)
                 {
                     case 0:
-                        Plots[i].Plot.Title("Microphone PCM Data");
+                        Plots[i].Plot.Title(deviceType[count] + " PCM Data");
                         Plots[i].Plot.YLabel("Amplitude (PCM)");
                         Plots[i].Plot.XLabel("Time (ms)");
                         break;
                     case 1:
-                        Plots[i].Plot.Title("Microphone FFT Data");
+                        Plots[i].Plot.Title(deviceType[count] + " FFT Data");
                         Plots[i].Plot.YLabel("Power (raw)");
                         Plots[i].Plot.XLabel("Frequency (Hz)");
+                        count++;
                         break;
                 }
             }
@@ -105,7 +118,6 @@ namespace echo_canceller
         /// <param name="e"></param>
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            label3.Text = "Selected Input Item : " + comboBoxMicrophone.SelectedItem.ToString();
             AudioHandler.SetInputDeviceIndex(comboBoxMicrophone.SelectedIndex);
         }
 
@@ -116,7 +128,6 @@ namespace echo_canceller
 
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
-            label4.Text = "Selected Output Item : " + comboBoxOutputDevice.SelectedItem.ToString();
             AudioHandler.SetOutputDeviceIndex(comboBoxOutputDevice.SelectedIndex);
         }
 
@@ -214,29 +225,58 @@ namespace echo_canceller
                 AudioHandler.EndStreaming();
             }
         }
-
-        private void setWaveViewer()
-        {
-/*
-            var waveStereo = new WaveInEvent();
-            waveViewerMicrophone.BackColor = Color.White;
-            waveViewerMicrophone.SamplesPerPixel = 400;
-            waveViewerMicrophone.StartPosition = 40000;
-            waveViewerMicrophone.WaveStream = waveStereo; // ストリームを指定するだけでよい
-            waveViewerStereoMixer.BackColor = Color.White;
-            waveViewerStereoMixer.SamplesPerPixel = 400;
-            waveViewerStereoMixer.StartPosition = 40000;
-            waveViewerStereoMixer.WaveStream = new WaveFileReader(open.FileName); // ストリームを指定するだけでよい
-            waveViewerOutput.BackColor = Color.White;
-            waveViewerOutput.SamplesPerPixel = 400;
-            waveViewerOutput.StartPosition = 40000;
-            waveViewerOutput.WaveStream = new WaveFileReader(open.FileName); // ストリームを指定するだけでよい*/
-
-        }
-
         private void labelStereoGraph_Click(object sender, EventArgs e)
         {
 
+        }
+
+
+        private void timerReplot_Tick(object sender, EventArgs e)
+        {
+            // Debug.WriteLine("timer");
+            // turn off the timer, take as long as we need to plot, then turn the timer back on
+            timerReplot.Enabled = false;
+            PlotLatestData();
+            timerReplot.Enabled = true;
+        }
+
+        public void PlotLatestData()
+        {
+            var plotList = AudioHandler.GetPlotData();
+
+            if (plotList == null)
+            {
+                Application.DoEvents();
+                return;
+            }
+
+            for (int i = 0; i < plotList.Count; i++)
+            {
+                var (data, hz) = plotList[i];
+                // plot the Xs and Ys for both graphs
+                Plots[i].Plot.Clear();
+                Plots[i].Plot.PlotSignal(data, hz, color: Color.White);
+                Plots[i].RefreshRequest();
+            }
+
+            // optionally adjust the scale to automatically fit the data
+            if (needsAutoScaling)
+            {
+                Plots[0].Plot.AxisAuto();
+                Plots[1].Plot.AxisAuto();
+                needsAutoScaling = false;
+            }
+
+            //scottPlotUC1.PlotSignal(Ys, RATE);
+
+            // this reduces flicker and helps keep the program responsive
+            Application.DoEvents();
+
+        }
+
+        private void autoScaleToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            needsAutoScaling = true;
         }
     }
 }
