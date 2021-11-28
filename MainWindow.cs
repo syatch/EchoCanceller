@@ -131,7 +131,7 @@ namespace echo_canceller
                 labelTest.Text = "Device Test : Speak something...";
                 AudioHandler.RecordTestAudioStart();
 
-                while (AudioHandler.state == AudioHandler.STATE.WAIT) {
+                while (AudioHandler.uiState == AudioHandler.UISTATE.WAIT) {
                     Application.DoEvents();
                     Thread.Sleep(10);
                 };
@@ -141,7 +141,7 @@ namespace echo_canceller
                 labelTest.Text = "Device Test : Now playing...";
                 AudioHandler.PlayTestAudio();
 
-                while (AudioHandler.state == AudioHandler.UISTATE.WAIT)
+                while (AudioHandler.uiState == AudioHandler.UISTATE.WAIT)
                 {
                     Application.DoEvents();
                     Thread.Sleep(10);
@@ -195,6 +195,11 @@ namespace echo_canceller
             waveViewerOutput.SamplesPerPixel = 400;
             waveViewerOutput.StartPosition = 40000;
             waveViewerOutput.WaveStream = new WaveFileReader(open.FileName); // ストリームを指定するだけでよい*/
+
+        }
+
+        private void labelStereoGraph_Click(object sender, EventArgs e)
+        {
 
         }
     }
