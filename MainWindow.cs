@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-//using NAudio.Wave; // for WaveIn
+using NAudio.Wave; // for WaveIn
 using System.Diagnostics; // debug write
 using System.Threading;
 
@@ -99,7 +99,7 @@ namespace echo_canceller
 
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void buttonWork_Click(object sender, EventArgs e)
         {
             canceller_function = !canceller_function;
 
@@ -108,11 +108,13 @@ namespace echo_canceller
                 buttonTest.Enabled = false;
                 buttonStream.Enabled = false;
                 DisableConboBox();
+                AudioHandler.StartWork();
             } else {
                 buttonWork.Text = "Start";
                 buttonTest.Enabled = true;
                 buttonStream.Enabled = true;
                 EnableConboBox();
+                AudioHandler.EndWork();
             }
         }
 
@@ -139,7 +141,7 @@ namespace echo_canceller
                 labelTest.Text = "Device Test : Now playing...";
                 AudioHandler.PlayTestAudio();
 
-                while (AudioHandler.state == AudioHandler.STATE.WAIT)
+                while (AudioHandler.state == AudioHandler.UISTATE.WAIT)
                 {
                     Application.DoEvents();
                     Thread.Sleep(10);
@@ -177,5 +179,23 @@ namespace echo_canceller
             }
         }
 
+        private void setWaveViewer()
+        {
+/*
+            var waveStereo = new WaveInEvent();
+            waveViewerMicrophone.BackColor = Color.White;
+            waveViewerMicrophone.SamplesPerPixel = 400;
+            waveViewerMicrophone.StartPosition = 40000;
+            waveViewerMicrophone.WaveStream = waveStereo; // ストリームを指定するだけでよい
+            waveViewerStereoMixer.BackColor = Color.White;
+            waveViewerStereoMixer.SamplesPerPixel = 400;
+            waveViewerStereoMixer.StartPosition = 40000;
+            waveViewerStereoMixer.WaveStream = new WaveFileReader(open.FileName); // ストリームを指定するだけでよい
+            waveViewerOutput.BackColor = Color.White;
+            waveViewerOutput.SamplesPerPixel = 400;
+            waveViewerOutput.StartPosition = 40000;
+            waveViewerOutput.WaveStream = new WaveFileReader(open.FileName); // ストリームを指定するだけでよい*/
+
+        }
     }
 }

@@ -9,6 +9,11 @@ using NAudio.CoreAudioApi;
 using System.Diagnostics; // debug write
 using System.Threading;
 using System.IO;
+using System;
+using System.Collections.Generic;
+// using NAudio.CoreAudioAPI;
+using NAudio.Dsp;
+using NAudio.Wave;
 //using System.Drawing; // 
 
 namespace echo_canceller
@@ -21,14 +26,28 @@ namespace echo_canceller
         private WaveInEvent waveMic;
         private WaveInEvent waveStereo;
         private WaveOut waveOut = new WaveOut();
+        private WaveBuffer waveBuffer = new WaveBuffer();
         public int volumeGain = 0;
         WaveFileWriter writer;
         AudioFileReader reader;
         BufferedWaveProvider bufferedWaveProvider;
-        public STATE state = STATE.DEFAULT;
+        private STATE state = STATE.IDLE;
+        public UISTATE uiState = UISTATE.DEFAULT;
+        private bool recording = false;
         private bool streaming = false;
-        private const int testWaitTime = 5000; // msec
-        public enum STATE
+
+        // const variable
+        private readonly int FFTLength = 512;
+        private readonly int testWaitTime = 5000; // msec
+        private enum STATE
+        {
+            IDLE,
+            RECORD,
+            PLAY,
+            STREAM,
+        }
+
+        public enum UISTATE
         {
             DEFAULT,
             WAIT,
@@ -40,15 +59,10 @@ namespace echo_canceller
             waveStereo = new WaveInEvent();
 
             waveMic.WaveFormat = new WaveFormat(44100, 16, 2);
-            // record when data available
-            waveMic.DataAvailable += (s, a) =>
-            {
-                if (writer != null)
-                    writer.Write(a.Buffer, 0, a.BytesRecorded);
-            };
-            waveMic.DataAvailable += WaveIn_DataAvailable;
+            waveMic.DataAvailable += WaveMic_DataAvailable;
             
             waveStereo.WaveFormat = new WaveFormat(44100, 16, 2);
+            waveStereo.DataAvailable += WaveStereo_DataAvailable;
 
             // record ending func
             waveMic.RecordingStopped += (s, a) =>
@@ -129,7 +143,9 @@ namespace echo_canceller
             waveMic.DeviceNumber = micDeviceIndex;
             writer =  new WaveFileWriter("./sounds/test.wav", waveMic.WaveFormat);
 
-            state = STATE.WAIT;
+            recording = true;
+            state = STATE.RECORD;
+            uiState = UISTATE.WAIT;
             
             // record in other thread
             Task task_record = Task.Run(() => {
@@ -138,13 +154,15 @@ namespace echo_canceller
 
             Task waitRecord = Task.Run(() => {
                 Thread.Sleep(testWaitTime);
-                state = STATE.DEFAULT;
+                uiState = UISTATE.DEFAULT;
             });
 
         }
 
         public void RecordTestAudioEnd()
         {
+            recording = false;
+            state = STATE.IDLE;
             waveMic.StopRecording();
             waveOut.Stop();
         }
@@ -155,13 +173,14 @@ namespace echo_canceller
             reader = new AudioFileReader("./sounds/test.wav");
             waveOut.Init(reader);
             waveOut.Play();
-            state = STATE.WAIT;
+            state = STATE.PLAY;
+            uiState = UISTATE.WAIT;
             Task waitRecord = Task.Run(() => {
                 Thread.Sleep(testWaitTime);
                 reader.Flush();
                 reader.Dispose();
                 reader = null;
-                state = STATE.DEFAULT;
+                uiState = UISTATE.DEFAULT;
             });
 
         }
@@ -170,7 +189,8 @@ namespace echo_canceller
         {
             waveMic.StopRecording();
             waveOut.Stop();
-            state = STATE.DEFAULT;
+            state = STATE.IDLE;
+            uiState = UISTATE.DEFAULT;
         }
 
 
@@ -178,6 +198,7 @@ namespace echo_canceller
         {
             waveMic.WaveFormat = new WaveFormat(44100, 16, 2);
             streaming = true;
+            state = STATE.STREAM;
             waveMic.DeviceNumber = micDeviceIndex;
             waveMic.StartRecording();
 
@@ -189,24 +210,70 @@ namespace echo_canceller
             waveOut.Play();
         }
 
-        private void WaveIn_DataAvailable(object sender, WaveInEventArgs e)
+        private void WaveMic_DataAvailable(object sender, WaveInEventArgs e)
         {
-            if (streaming)
-            {/*
-                for (int index = 0; index < e.BytesRecorded; index++)
-                {
-                    e.Buffer[index] = e.Buffer[index] * volumeGain;
-                }*/
-                bufferedWaveProvider.AddSamples(e.Buffer, 0, e.BytesRecorded);
+            switch (state) {
+                case STATE.RECORD :
+                    if (writer != null)
+                        writer.Write(e.Buffer, 0, e.BytesRecorded);
+                    break;
+                case STATE.STREAM:
+                    bufferedWaveProvider.AddSamples(e.Buffer, 0, e.BytesRecorded);
+                    /*
+                    // バイト列を合成
+                    // waveIn.WaveFormat.BlockAlign indicates byte per sample
+                    // nomally, 2byte(16bit) per sample (16bit = short)
+                    for (int i = 0; i < e.BytesRecorded; i += waveMic.WaveFormat.BlockAlign)
+                    {
+                        //リトルエンディアンの並びで合成
+                        short sample = (short)(e.Buffer[i + 1] << 8 | e.Buffer[i + 0]);
+                        // make max 1.0f
+                        float data = sample / 32768f;
+                        // store data
+                        waveBuffer.Add(data);
+                    }
+
+                    //バッファが十分溜まった
+                    if (waveBuffer.BufferedLength >= FFTLength)
+                    {
+                        //バッファから読みだしてフーリエ変換
+                        var fftsample = waveBuffer.Read(FFTLength);
+                        var result = DoFourier(fftsample);
+                        //(お好みで)結果を描画
+                        RenderSpectrum(result);
+                    }*/
+                    break;
+            }
+        }
+
+        private void WaveStereo_DataAvailable(object sender, WaveInEventArgs e)
+        {
+            switch (state)
+            {
+                case STATE.STREAM:
+                    break;
             }
         }
 
         public void EndStreaming()
         {
             streaming = false;
+            state = STATE.IDLE;
             waveMic.StopRecording();
             waveOut.Stop();
         }
+
+        public void StartWork()
+        {
+
+        }
+
+
+        public void EndWork()
+        {
+
+        }
+
     }
 
 }

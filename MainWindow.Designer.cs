@@ -28,9 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.comboBoxMicrophone = new System.Windows.Forms.ComboBox();
             this.labelMicrophone = new System.Windows.Forms.Label();
             this.labelOutput = new System.Windows.Forms.Label();
@@ -41,12 +38,15 @@
             this.buttonTest = new System.Windows.Forms.Button();
             this.labelTest = new System.Windows.Forms.Label();
             this.buttonStream = new System.Windows.Forms.Button();
-            this.chartInput = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.waveViewer1 = new NAudio.Gui.WaveViewer();
+            this.waveViewerMicrophone = new NAudio.Gui.WaveViewer();
             this.labelStereoMixer = new System.Windows.Forms.Label();
             this.comboBoxStereoMixer = new System.Windows.Forms.ComboBox();
             this.labelStreamTest = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.chartInput)).BeginInit();
+            this.waveViewerStereoMixer = new NAudio.Gui.WaveViewer();
+            this.waveViewerOutput = new NAudio.Gui.WaveViewer();
+            this.labelMicGraph = new System.Windows.Forms.Label();
+            this.labelStereoGraph = new System.Windows.Forms.Label();
+            this.labelOutputGraph = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // comboBoxMicrophone
@@ -117,13 +117,13 @@
             // 
             this.buttonWork.BackColor = System.Drawing.Color.Silver;
             this.buttonWork.ForeColor = System.Drawing.SystemColors.Info;
-            this.buttonWork.Location = new System.Drawing.Point(606, 749);
+            this.buttonWork.Location = new System.Drawing.Point(1447, 841);
             this.buttonWork.Name = "buttonWork";
             this.buttonWork.Size = new System.Drawing.Size(182, 53);
             this.buttonWork.TabIndex = 10;
             this.buttonWork.Text = "Start";
             this.buttonWork.UseVisualStyleBackColor = false;
-            this.buttonWork.Click += new System.EventHandler(this.button1_Click);
+            this.buttonWork.Click += new System.EventHandler(this.buttonWork_Click);
             // 
             // buttonTest
             // 
@@ -160,35 +160,16 @@
             this.buttonStream.UseVisualStyleBackColor = false;
             this.buttonStream.Click += new System.EventHandler(this.buttonStream_Click);
             // 
-            // chartInput
+            // waveViewerMicrophone
             // 
-            this.chartInput.BackColor = System.Drawing.Color.DimGray;
-            this.chartInput.BorderlineColor = System.Drawing.Color.DarkRed;
-            chartArea4.Name = "ChartArea1";
-            this.chartInput.ChartAreas.Add(chartArea4);
-            legend4.Name = "Legend1";
-            this.chartInput.Legends.Add(legend4);
-            this.chartInput.Location = new System.Drawing.Point(48, 479);
-            this.chartInput.Name = "chartInput";
-            series4.ChartArea = "ChartArea1";
-            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
-            series4.Legend = "Legend1";
-            series4.Name = "Series1";
-            this.chartInput.Series.Add(series4);
-            this.chartInput.Size = new System.Drawing.Size(740, 216);
-            this.chartInput.TabIndex = 14;
-            this.chartInput.Text = "Input";
-            // 
-            // waveViewer1
-            // 
-            this.waveViewer1.BackColor = System.Drawing.SystemColors.Info;
-            this.waveViewer1.Location = new System.Drawing.Point(67, 624);
-            this.waveViewer1.Name = "waveViewer1";
-            this.waveViewer1.SamplesPerPixel = 128;
-            this.waveViewer1.Size = new System.Drawing.Size(683, 98);
-            this.waveViewer1.StartPosition = ((long)(0));
-            this.waveViewer1.TabIndex = 15;
-            this.waveViewer1.WaveStream = null;
+            this.waveViewerMicrophone.BackColor = System.Drawing.SystemColors.Info;
+            this.waveViewerMicrophone.Location = new System.Drawing.Point(946, 81);
+            this.waveViewerMicrophone.Name = "waveViewerMicrophone";
+            this.waveViewerMicrophone.SamplesPerPixel = 128;
+            this.waveViewerMicrophone.Size = new System.Drawing.Size(683, 177);
+            this.waveViewerMicrophone.StartPosition = ((long)(0));
+            this.waveViewerMicrophone.TabIndex = 15;
+            this.waveViewerMicrophone.WaveStream = null;
             // 
             // labelStereoMixer
             // 
@@ -223,17 +204,79 @@
             this.labelStreamTest.TabIndex = 19;
             this.labelStreamTest.Text = "Streaming Test";
             // 
+            // waveViewerStereoMixer
+            // 
+            this.waveViewerStereoMixer.BackColor = System.Drawing.SystemColors.Info;
+            this.waveViewerStereoMixer.Location = new System.Drawing.Point(946, 342);
+            this.waveViewerStereoMixer.Name = "waveViewerStereoMixer";
+            this.waveViewerStereoMixer.SamplesPerPixel = 128;
+            this.waveViewerStereoMixer.Size = new System.Drawing.Size(683, 177);
+            this.waveViewerStereoMixer.StartPosition = ((long)(0));
+            this.waveViewerStereoMixer.TabIndex = 20;
+            this.waveViewerStereoMixer.WaveStream = null;
+            // 
+            // waveViewerOutput
+            // 
+            this.waveViewerOutput.BackColor = System.Drawing.SystemColors.Info;
+            this.waveViewerOutput.Location = new System.Drawing.Point(946, 616);
+            this.waveViewerOutput.Name = "waveViewerOutput";
+            this.waveViewerOutput.SamplesPerPixel = 128;
+            this.waveViewerOutput.Size = new System.Drawing.Size(683, 177);
+            this.waveViewerOutput.StartPosition = ((long)(0));
+            this.waveViewerOutput.TabIndex = 21;
+            this.waveViewerOutput.WaveStream = null;
+            // 
+            // labelMicGraph
+            // 
+            this.labelMicGraph.AutoSize = true;
+            this.labelMicGraph.BackColor = System.Drawing.SystemColors.WindowText;
+            this.labelMicGraph.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.labelMicGraph.ForeColor = System.Drawing.SystemColors.InactiveBorder;
+            this.labelMicGraph.Location = new System.Drawing.Point(940, 20);
+            this.labelMicGraph.Name = "labelMicGraph";
+            this.labelMicGraph.Size = new System.Drawing.Size(259, 33);
+            this.labelMicGraph.TabIndex = 22;
+            this.labelMicGraph.Text = "Microphone Graph";
+            // 
+            // labelStereoGraph
+            // 
+            this.labelStereoGraph.AutoSize = true;
+            this.labelStereoGraph.BackColor = System.Drawing.SystemColors.WindowText;
+            this.labelStereoGraph.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.labelStereoGraph.ForeColor = System.Drawing.SystemColors.InactiveBorder;
+            this.labelStereoGraph.Location = new System.Drawing.Point(940, 289);
+            this.labelStereoGraph.Name = "labelStereoGraph";
+            this.labelStereoGraph.Size = new System.Drawing.Size(277, 33);
+            this.labelStereoGraph.TabIndex = 23;
+            this.labelStereoGraph.Text = "Stereo Mixer Graph";
+            // 
+            // labelOutputGraph
+            // 
+            this.labelOutputGraph.AutoSize = true;
+            this.labelOutputGraph.BackColor = System.Drawing.SystemColors.WindowText;
+            this.labelOutputGraph.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.labelOutputGraph.ForeColor = System.Drawing.SystemColors.InactiveBorder;
+            this.labelOutputGraph.Location = new System.Drawing.Point(940, 563);
+            this.labelOutputGraph.Name = "labelOutputGraph";
+            this.labelOutputGraph.Size = new System.Drawing.Size(277, 33);
+            this.labelOutputGraph.TabIndex = 24;
+            this.labelOutputGraph.Text = "Stereo Mixer Graph";
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.WindowText;
-            this.ClientSize = new System.Drawing.Size(800, 826);
+            this.ClientSize = new System.Drawing.Size(1654, 927);
+            this.Controls.Add(this.labelOutputGraph);
+            this.Controls.Add(this.labelStereoGraph);
+            this.Controls.Add(this.labelMicGraph);
+            this.Controls.Add(this.waveViewerOutput);
+            this.Controls.Add(this.waveViewerStereoMixer);
             this.Controls.Add(this.labelStreamTest);
             this.Controls.Add(this.comboBoxStereoMixer);
             this.Controls.Add(this.labelStereoMixer);
-            this.Controls.Add(this.waveViewer1);
-            this.Controls.Add(this.chartInput);
+            this.Controls.Add(this.waveViewerMicrophone);
             this.Controls.Add(this.buttonStream);
             this.Controls.Add(this.labelTest);
             this.Controls.Add(this.buttonTest);
@@ -246,7 +289,6 @@
             this.Controls.Add(this.comboBoxMicrophone);
             this.Name = "MainWindow";
             this.Text = "Simple Echo Canceller";
-            ((System.ComponentModel.ISupportInitialize)(this.chartInput)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -263,11 +305,15 @@
         private System.Windows.Forms.Button buttonTest;
         private System.Windows.Forms.Label labelTest;
         private System.Windows.Forms.Button buttonStream;
-        private System.Windows.Forms.DataVisualization.Charting.Chart chartInput;
-        private NAudio.Gui.WaveViewer waveViewer1;
+        private NAudio.Gui.WaveViewer waveViewerMicrophone;
         private System.Windows.Forms.Label labelStereoMixer;
         private System.Windows.Forms.ComboBox comboBoxStereoMixer;
         private System.Windows.Forms.Label labelStreamTest;
+        private NAudio.Gui.WaveViewer waveViewerStereoMixer;
+        private NAudio.Gui.WaveViewer waveViewerOutput;
+        private System.Windows.Forms.Label labelMicGraph;
+        private System.Windows.Forms.Label labelStereoGraph;
+        private System.Windows.Forms.Label labelOutputGraph;
     }
 }
 
