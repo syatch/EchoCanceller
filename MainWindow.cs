@@ -20,10 +20,13 @@ namespace echo_canceller
         private bool testing = false;
         private bool streaming = false;
         AudioHandler AudioHandler = new AudioHandler();
+        List<ScottPlot.FormsPlot> Plots = new List<ScottPlot.FormsPlot>();
+        private readonly int plotNum = 6;
         public MainWindow()
         {
             InitializeComponent();
             GetMicInfo();
+            SetupGraphLabels();
         }
   
         private void EnableConboBox()
@@ -59,6 +62,39 @@ namespace echo_canceller
             for (int i = 0; i < OutputDeviceList.Count; i++)
                 comboBoxOutputDevice.Items.Add(OutputDeviceList[i]);
             comboBoxOutputDevice.SelectedIndex = 0;
+
+        }
+
+        public void SetupGraphLabels()
+        {
+            Plots.Add(formsPlotMicRaw);
+            Plots.Add(formsPlotMicFFT);
+            Plots.Add(formsPlotStereoRaw);
+            Plots.Add(formsPlotStereoFFT);
+            Plots.Add(formsPlotOutRaw);
+            Plots.Add(formsPlotOutFFT);
+            for (int i = 0; i < plotNum; i++)
+            {
+                Plots[i].Plot.Style(figureBackground: Color.Black,
+                                    dataBackground: Color.Black,
+                                    grid: Color.White,
+                                    tick: Color.White,
+                                    axisLabel: Color.White,
+                                    titleLabel: Color.White);
+                switch(i % 2)
+                {
+                    case 0:
+                        Plots[i].Plot.Title("Microphone PCM Data");
+                        Plots[i].Plot.YLabel("Amplitude (PCM)");
+                        Plots[i].Plot.XLabel("Time (ms)");
+                        break;
+                    case 1:
+                        Plots[i].Plot.Title("Microphone FFT Data");
+                        Plots[i].Plot.YLabel("Power (raw)");
+                        Plots[i].Plot.XLabel("Frequency (Hz)");
+                        break;
+                }
+            }
 
         }
 

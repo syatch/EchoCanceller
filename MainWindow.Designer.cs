@@ -44,12 +44,12 @@
             this.labelMicGraph = new System.Windows.Forms.Label();
             this.labelStereoGraph = new System.Windows.Forms.Label();
             this.labelOutputGraph = new System.Windows.Forms.Label();
-            this.formsPlot1 = new ScottPlot.FormsPlot();
-            this.formsPlot2 = new ScottPlot.FormsPlot();
-            this.formsPlot3 = new ScottPlot.FormsPlot();
-            this.formsPlot4 = new ScottPlot.FormsPlot();
-            this.formsPlot5 = new ScottPlot.FormsPlot();
-            this.formsPlot6 = new ScottPlot.FormsPlot();
+            this.formsPlotMicRaw = new ScottPlot.FormsPlot();
+            this.formsPlotMicFFT = new ScottPlot.FormsPlot();
+            this.formsPlotStereoRaw = new ScottPlot.FormsPlot();
+            this.formsPlotStereoFFT = new ScottPlot.FormsPlot();
+            this.formsPlotOutRaw = new ScottPlot.FormsPlot();
+            this.formsPlotOutFFT = new ScottPlot.FormsPlot();
             this.SuspendLayout();
             // 
             // comboBoxMicrophone
@@ -229,82 +229,82 @@
             this.labelOutputGraph.ForeColor = System.Drawing.SystemColors.InactiveBorder;
             this.labelOutputGraph.Location = new System.Drawing.Point(906, 896);
             this.labelOutputGraph.Name = "labelOutputGraph";
-            this.labelOutputGraph.Size = new System.Drawing.Size(277, 33);
+            this.labelOutputGraph.Size = new System.Drawing.Size(212, 33);
             this.labelOutputGraph.TabIndex = 24;
-            this.labelOutputGraph.Text = "Stereo Mixer Graph";
+            this.labelOutputGraph.Text = "Out Put Graph";
             // 
-            // formsPlot1
+            // formsPlotMicRaw
             // 
-            this.formsPlot1.BackColor = System.Drawing.Color.Transparent;
-            this.formsPlot1.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.formsPlot1.Location = new System.Drawing.Point(852, 59);
-            this.formsPlot1.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
-            this.formsPlot1.Name = "formsPlot1";
-            this.formsPlot1.Size = new System.Drawing.Size(860, 375);
-            this.formsPlot1.TabIndex = 25;
+            this.formsPlotMicRaw.BackColor = System.Drawing.Color.White;
+            this.formsPlotMicRaw.ForeColor = System.Drawing.SystemColors.Info;
+            this.formsPlotMicRaw.Location = new System.Drawing.Point(852, 59);
+            this.formsPlotMicRaw.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.formsPlotMicRaw.Name = "formsPlotMicRaw";
+            this.formsPlotMicRaw.Size = new System.Drawing.Size(860, 375);
+            this.formsPlotMicRaw.TabIndex = 25;
             // 
-            // formsPlot2
+            // formsPlotMicFFT
             // 
-            this.formsPlot2.BackColor = System.Drawing.Color.Transparent;
-            this.formsPlot2.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.formsPlot2.Location = new System.Drawing.Point(1756, 59);
-            this.formsPlot2.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
-            this.formsPlot2.Name = "formsPlot2";
-            this.formsPlot2.Size = new System.Drawing.Size(860, 375);
-            this.formsPlot2.TabIndex = 26;
+            this.formsPlotMicFFT.BackColor = System.Drawing.Color.Transparent;
+            this.formsPlotMicFFT.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.formsPlotMicFFT.Location = new System.Drawing.Point(1756, 59);
+            this.formsPlotMicFFT.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.formsPlotMicFFT.Name = "formsPlotMicFFT";
+            this.formsPlotMicFFT.Size = new System.Drawing.Size(860, 375);
+            this.formsPlotMicFFT.TabIndex = 26;
             // 
-            // formsPlot3
+            // formsPlotStereoRaw
             // 
-            this.formsPlot3.BackColor = System.Drawing.Color.Transparent;
-            this.formsPlot3.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.formsPlot3.Location = new System.Drawing.Point(852, 502);
-            this.formsPlot3.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
-            this.formsPlot3.Name = "formsPlot3";
-            this.formsPlot3.Size = new System.Drawing.Size(860, 375);
-            this.formsPlot3.TabIndex = 27;
+            this.formsPlotStereoRaw.BackColor = System.Drawing.Color.Transparent;
+            this.formsPlotStereoRaw.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.formsPlotStereoRaw.Location = new System.Drawing.Point(852, 502);
+            this.formsPlotStereoRaw.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.formsPlotStereoRaw.Name = "formsPlotStereoRaw";
+            this.formsPlotStereoRaw.Size = new System.Drawing.Size(860, 375);
+            this.formsPlotStereoRaw.TabIndex = 27;
             // 
-            // formsPlot4
+            // formsPlotStereoFFT
             // 
-            this.formsPlot4.BackColor = System.Drawing.Color.Transparent;
-            this.formsPlot4.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.formsPlot4.Location = new System.Drawing.Point(1756, 502);
-            this.formsPlot4.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
-            this.formsPlot4.Name = "formsPlot4";
-            this.formsPlot4.Size = new System.Drawing.Size(860, 375);
-            this.formsPlot4.TabIndex = 28;
+            this.formsPlotStereoFFT.BackColor = System.Drawing.Color.Transparent;
+            this.formsPlotStereoFFT.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.formsPlotStereoFFT.Location = new System.Drawing.Point(1756, 502);
+            this.formsPlotStereoFFT.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.formsPlotStereoFFT.Name = "formsPlotStereoFFT";
+            this.formsPlotStereoFFT.Size = new System.Drawing.Size(860, 375);
+            this.formsPlotStereoFFT.TabIndex = 28;
             // 
-            // formsPlot5
+            // formsPlotOutRaw
             // 
-            this.formsPlot5.BackColor = System.Drawing.Color.Transparent;
-            this.formsPlot5.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.formsPlot5.Location = new System.Drawing.Point(852, 935);
-            this.formsPlot5.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
-            this.formsPlot5.Name = "formsPlot5";
-            this.formsPlot5.Size = new System.Drawing.Size(860, 375);
-            this.formsPlot5.TabIndex = 29;
+            this.formsPlotOutRaw.BackColor = System.Drawing.Color.Transparent;
+            this.formsPlotOutRaw.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.formsPlotOutRaw.Location = new System.Drawing.Point(852, 935);
+            this.formsPlotOutRaw.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.formsPlotOutRaw.Name = "formsPlotOutRaw";
+            this.formsPlotOutRaw.Size = new System.Drawing.Size(860, 375);
+            this.formsPlotOutRaw.TabIndex = 29;
             // 
-            // formsPlot6
+            // formsPlotOutFFT
             // 
-            this.formsPlot6.BackColor = System.Drawing.Color.Transparent;
-            this.formsPlot6.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.formsPlot6.Location = new System.Drawing.Point(1755, 935);
-            this.formsPlot6.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
-            this.formsPlot6.Name = "formsPlot6";
-            this.formsPlot6.Size = new System.Drawing.Size(860, 375);
-            this.formsPlot6.TabIndex = 30;
+            this.formsPlotOutFFT.BackColor = System.Drawing.Color.Transparent;
+            this.formsPlotOutFFT.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.formsPlotOutFFT.Location = new System.Drawing.Point(1755, 935);
+            this.formsPlotOutFFT.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.formsPlotOutFFT.Name = "formsPlotOutFFT";
+            this.formsPlotOutFFT.Size = new System.Drawing.Size(860, 375);
+            this.formsPlotOutFFT.TabIndex = 30;
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.WindowText;
+            this.BackColor = System.Drawing.SystemColors.HotTrack;
             this.ClientSize = new System.Drawing.Size(2631, 1426);
-            this.Controls.Add(this.formsPlot6);
-            this.Controls.Add(this.formsPlot5);
-            this.Controls.Add(this.formsPlot4);
-            this.Controls.Add(this.formsPlot3);
-            this.Controls.Add(this.formsPlot2);
-            this.Controls.Add(this.formsPlot1);
+            this.Controls.Add(this.formsPlotOutFFT);
+            this.Controls.Add(this.formsPlotOutRaw);
+            this.Controls.Add(this.formsPlotStereoFFT);
+            this.Controls.Add(this.formsPlotStereoRaw);
+            this.Controls.Add(this.formsPlotMicFFT);
+            this.Controls.Add(this.formsPlotMicRaw);
             this.Controls.Add(this.labelOutputGraph);
             this.Controls.Add(this.labelStereoGraph);
             this.Controls.Add(this.labelMicGraph);
@@ -345,12 +345,12 @@
         private System.Windows.Forms.Label labelMicGraph;
         private System.Windows.Forms.Label labelStereoGraph;
         private System.Windows.Forms.Label labelOutputGraph;
-        private ScottPlot.FormsPlot formsPlot1;
-        private ScottPlot.FormsPlot formsPlot2;
-        private ScottPlot.FormsPlot formsPlot3;
-        private ScottPlot.FormsPlot formsPlot4;
-        private ScottPlot.FormsPlot formsPlot5;
-        private ScottPlot.FormsPlot formsPlot6;
+        private ScottPlot.FormsPlot formsPlotMicRaw;
+        private ScottPlot.FormsPlot formsPlotMicFFT;
+        private ScottPlot.FormsPlot formsPlotStereoRaw;
+        private ScottPlot.FormsPlot formsPlotStereoFFT;
+        private ScottPlot.FormsPlot formsPlotOutRaw;
+        private ScottPlot.FormsPlot formsPlotOutFFT;
     }
 }
 
