@@ -68,11 +68,11 @@ namespace echo_canceller
             waveMic = new WaveInEvent();
             waveStereo = new WaveInEvent();
 
-            waveMic.WaveFormat = new WaveFormat(SAMPLE_RATE, SAMPLE_RATE, 2);
+            waveMic.WaveFormat = new WaveFormat(SAMPLE_RATE, SAMPLE_BIT, 2);
             bufferedWaveProviderMic = new BufferedWaveProvider(waveMic.WaveFormat);
             waveMic.DataAvailable += WaveMic_DataAvailable;
 
-            waveStereo.WaveFormat = new WaveFormat(SAMPLE_RATE, SAMPLE_RATE, 2);
+            waveStereo.WaveFormat = new WaveFormat(SAMPLE_RATE, SAMPLE_BIT, 2);
             bufferedWaveProviderStereo = new BufferedWaveProvider(waveStereo.WaveFormat);
             //Debug.WriteLine("Buffer Stereo Length : " + bufferedWaveProviderStereo.BufferLength);
             waveStereo.DataAvailable += WaveStereo_DataAvailable;
