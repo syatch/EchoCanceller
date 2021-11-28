@@ -80,7 +80,6 @@ namespace echo_canceller
             int count = 0;
             for (int i = 0; i < plotNum; i++)
             {
-                Plots[i].Configuration
                 Plots[i].Plot.XAxis.Ticks(false);
                 Plots[i].Plot.XAxis.Grid(false);
                 Plots[i].Plot.YAxis.Ticks(false);

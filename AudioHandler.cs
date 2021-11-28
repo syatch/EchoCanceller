@@ -38,7 +38,9 @@ namespace echo_canceller
         List<BufferedWaveProvider> buffers = new List<BufferedWaveProvider>();
         BufferedWaveProvider bufferedWaveProviderMic;
         BufferedWaveProvider bufferedWaveProviderStereo;
+        AsioOut mixer;
         BufferedWaveProvider bufferedWaveProviderOut;
+        MultiplexingWaveProvider mixWaveProvider;
         private STATE state = STATE.IDLE;
         public UISTATE uiState = UISTATE.DEFAULT;
 
@@ -249,6 +251,9 @@ namespace echo_canceller
                     bufferedWaveProvider.AddSamples(e.Buffer, 0, e.BytesRecorded);
                     bufferedWaveProviderMic.AddSamples(e.Buffer, 0, e.BytesRecorded);
                     break;
+                case STATE.WORK:
+                    bufferedWaveProviderMic.AddSamples(e.Buffer, 0, e.BytesRecorded);
+                    break;
             }
 
         }
@@ -260,6 +265,9 @@ namespace echo_canceller
                 case STATE.STREAM:
                     bufferedWaveProviderStereo.AddSamples(e.Buffer, 0, e.BytesRecorded);
                     break;
+                case STATE.WORK:
+                    bufferedWaveProviderStereo.AddSamples(e.Buffer, 0, e.BytesRecorded);
+                    break;
             }
         }
 
@@ -269,24 +277,61 @@ namespace echo_canceller
             waveMic.StopRecording();
             waveOut.Stop();
             waveStereo.StopRecording();
+            waveStereo.StopRecording();
         }
 
 
         public void StartWork()
         {
+            waveMic.WaveFormat = new WaveFormat(SAMPLE_RATE, SAMPLE_BIT, 2);
+            state = STATE.WORK;
+            waveMic.DeviceNumber = micDeviceIndex;
+            waveMic.BufferMilliseconds = (int)((double)BUFFERSIZE / (double)SAMPLE_RATE * 1000.0);
+            waveMic.StartRecording();
+            // for stream
+            bufferedWaveProviderMic = new BufferedWaveProvider(waveMic.WaveFormat);
+            bufferedWaveProviderMic.BufferLength = BUFFERSIZE * 2;
+            bufferedWaveProviderMic.DiscardOnBufferOverflow = true;
 
+
+            // stereo data also stream
+            waveStereo.DeviceNumber = stereoMixerIndex;
+            waveStereo.WaveFormat = new WaveFormat(SAMPLE_RATE, SAMPLE_BIT, 2);
+            waveStereo.BufferMilliseconds = (int)((double)BUFFERSIZE / (double)SAMPLE_RATE * 1000.0);
+            waveStereo.StartRecording();
+            bufferedWaveProviderStereo = new BufferedWaveProvider(waveStereo.WaveFormat);
+            bufferedWaveProviderStereo.BufferLength = BUFFERSIZE * 2;
+            bufferedWaveProviderStereo.DiscardOnBufferOverflow = true;
+
+            
+            /*//一般的な44.1kHz, 16bit, ステレオサウンドの音源を想定
+            mixWaveProvider = new MultiplexingWaveProvider(new IWaveProvider[] { bufferedWaveProviderStereo, bufferedWaveProviderMic }, 2);
+            mixWaveProvider.ConnectInputToOutput(0, 1);
+            mixWaveProvider.ConnectInputToOutput(1, 0);
+            mixer.DeviceNumber = outputDeviceIndex;
+            mixer.Init(mixWaveProvider);
+            mixer.Play();*/
+
+            buffers.Clear();
+            buffers.Add(bufferedWaveProviderMic);
+            buffers.Add(bufferedWaveProviderStereo);
         }
 
 
         public void EndWork()
         {
+            state = STATE.IDLE;
+            waveMic.StopRecording();
+            waveStereo.StopRecording();
+            waveOut.Stop();
+            waveStereo.StopRecording();
 
         }
 
         public List<(double[], double)> GetPlotData()
         {
             var data = new List<(double[], double)>();
-            if (state != STATE.STREAM)
+            if ((state != STATE.STREAM) && (state != STATE.WORK))
                 return null;
 
             for (int index = 0; index < buffers.Count; index++)
