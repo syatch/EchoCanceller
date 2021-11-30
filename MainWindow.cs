@@ -304,5 +304,15 @@ namespace echo_canceller
                 value = 1000;
             progressBarCutVolume.Value = value;
         }
+
+        private void trackBarStereoInputLevel_Scroll(object sender, EventArgs e)
+        {
+
+        }
+        private void trackBarOutputLevel_Scroll(object sender, EventArgs e)
+        {
+            AudioHandler.SetOutputLevel(trackBarOutputLevel.Value / 10.0);
+        }
+
     }
 }

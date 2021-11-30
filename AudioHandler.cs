@@ -34,6 +34,8 @@ namespace echo_canceller
         public int volumeGain = 0;
         private double cutVolume = 0;
         private double micMeanVolume = 0;
+        private double inputStereoLevel = 1.0;
+        private double outputLevel = 1.0;
         WaveFileWriter writer;
         AudioFileReader reader;
         BufferedWaveProvider bufferedWaveProvider;
@@ -89,6 +91,7 @@ namespace echo_canceller
                     writer = null;
                 }
                 waveMic.Dispose();
+                micMeanVolume = 0;
             };
         }
         ~AudioHandler()
@@ -295,8 +298,9 @@ namespace echo_canceller
                     for (int i = 0; i < rawDataNum; i++)
                     {
                         // store the value in Ys as a percent (+/- 100% = 200%)
-                        short data = (Int16)(-1 * getData[i]);
-                        if (Math.Abs(data) < cutVolume)
+                        short data = (Int16)(-1 * getData[i] * outputLevel);
+                        //Debug.WriteLine(data);
+                        if ((Math.Abs(data) < cutVolume) || (Math.Abs(data) == 0))
                             convertData[i] = 1;
                         else
                             convertData[i] = data;
@@ -486,6 +490,14 @@ namespace echo_canceller
         public double GetMicVolume()
         {
             return micMeanVolume / Math.Pow(2, SAMPLE_BIT) * 100000;
+        }
+        public void SetInputStereoLevel(double level)
+        {
+            inputStereoLevel = level;
+        }
+        public void SetOutputLevel(double level)
+        {
+            outputLevel = level;
         }
     }
 }

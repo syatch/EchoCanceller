@@ -55,7 +55,13 @@
             this.trackBarCutVolume = new System.Windows.Forms.TrackBar();
             this.labelCutVolume = new System.Windows.Forms.Label();
             this.progressBarCutVolume = new System.Windows.Forms.ProgressBar();
+            this.trackBarStereoInputLevel = new System.Windows.Forms.TrackBar();
+            this.labelStereoInputVolume = new System.Windows.Forms.Label();
+            this.labelOutputLevel = new System.Windows.Forms.Label();
+            this.trackBarOutputLevel = new System.Windows.Forms.TrackBar();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarCutVolume)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarStereoInputLevel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarOutputLevel)).BeginInit();
             this.SuspendLayout();
             // 
             // comboBoxMicrophone
@@ -323,17 +329,62 @@
             this.labelCutVolume.ForeColor = System.Drawing.SystemColors.InactiveBorder;
             this.labelCutVolume.Location = new System.Drawing.Point(22, 725);
             this.labelCutVolume.Name = "labelCutVolume";
-            this.labelCutVolume.Size = new System.Drawing.Size(294, 33);
+            this.labelCutVolume.Size = new System.Drawing.Size(253, 33);
             this.labelCutVolume.TabIndex = 34;
-            this.labelCutVolume.Text = "Select Output Driver";
+            this.labelCutVolume.Text = "Cut Volume Level";
             // 
             // progressBarCutVolume
             // 
+            this.progressBarCutVolume.ForeColor = System.Drawing.SystemColors.WindowText;
             this.progressBarCutVolume.Location = new System.Drawing.Point(42, 841);
             this.progressBarCutVolume.Maximum = 1000;
             this.progressBarCutVolume.Name = "progressBarCutVolume";
             this.progressBarCutVolume.Size = new System.Drawing.Size(730, 27);
             this.progressBarCutVolume.TabIndex = 35;
+            // 
+            // trackBarStereoInputLevel
+            // 
+            this.trackBarStereoInputLevel.BackColor = System.Drawing.Color.Black;
+            this.trackBarStereoInputLevel.Location = new System.Drawing.Point(18, 944);
+            this.trackBarStereoInputLevel.Maximum = 50;
+            this.trackBarStereoInputLevel.Name = "trackBarStereoInputLevel";
+            this.trackBarStereoInputLevel.Size = new System.Drawing.Size(776, 90);
+            this.trackBarStereoInputLevel.TabIndex = 36;
+            this.trackBarStereoInputLevel.Value = 10;
+            this.trackBarStereoInputLevel.Scroll += new System.EventHandler(this.trackBarStereoInputLevel_Scroll);
+            // 
+            // labelStereoInputVolume
+            // 
+            this.labelStereoInputVolume.AutoSize = true;
+            this.labelStereoInputVolume.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelStereoInputVolume.ForeColor = System.Drawing.SystemColors.InactiveBorder;
+            this.labelStereoInputVolume.Location = new System.Drawing.Point(22, 896);
+            this.labelStereoInputVolume.Name = "labelStereoInputVolume";
+            this.labelStereoInputVolume.Size = new System.Drawing.Size(262, 33);
+            this.labelStereoInputVolume.TabIndex = 37;
+            this.labelStereoInputVolume.Text = "Stereo Input Level";
+            // 
+            // labelOutputLevel
+            // 
+            this.labelOutputLevel.AutoSize = true;
+            this.labelOutputLevel.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelOutputLevel.ForeColor = System.Drawing.SystemColors.InactiveBorder;
+            this.labelOutputLevel.Location = new System.Drawing.Point(22, 1037);
+            this.labelOutputLevel.Name = "labelOutputLevel";
+            this.labelOutputLevel.Size = new System.Drawing.Size(189, 33);
+            this.labelOutputLevel.TabIndex = 38;
+            this.labelOutputLevel.Text = "Output Level";
+            // 
+            // trackBarOutputLevel
+            // 
+            this.trackBarOutputLevel.BackColor = System.Drawing.Color.Black;
+            this.trackBarOutputLevel.Location = new System.Drawing.Point(18, 1082);
+            this.trackBarOutputLevel.Maximum = 50;
+            this.trackBarOutputLevel.Name = "trackBarOutputLevel";
+            this.trackBarOutputLevel.Size = new System.Drawing.Size(776, 90);
+            this.trackBarOutputLevel.TabIndex = 39;
+            this.trackBarOutputLevel.Value = 10;
+            this.trackBarOutputLevel.Scroll += new System.EventHandler(this.trackBarOutputLevel_Scroll);
             // 
             // MainWindow
             // 
@@ -341,6 +392,10 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.WindowText;
             this.ClientSize = new System.Drawing.Size(2631, 1426);
+            this.Controls.Add(this.trackBarOutputLevel);
+            this.Controls.Add(this.labelOutputLevel);
+            this.Controls.Add(this.labelStereoInputVolume);
+            this.Controls.Add(this.trackBarStereoInputLevel);
             this.Controls.Add(this.progressBarCutVolume);
             this.Controls.Add(this.labelCutVolume);
             this.Controls.Add(this.trackBarCutVolume);
@@ -369,6 +424,8 @@
             this.Name = "MainWindow";
             this.Text = "Simple Echo Canceller";
             ((System.ComponentModel.ISupportInitialize)(this.trackBarCutVolume)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarStereoInputLevel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarOutputLevel)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -401,6 +458,10 @@
         private System.Windows.Forms.TrackBar trackBarCutVolume;
         private System.Windows.Forms.Label labelCutVolume;
         private System.Windows.Forms.ProgressBar progressBarCutVolume;
+        private System.Windows.Forms.TrackBar trackBarStereoInputLevel;
+        private System.Windows.Forms.Label labelStereoInputVolume;
+        private System.Windows.Forms.Label labelOutputLevel;
+        private System.Windows.Forms.TrackBar trackBarOutputLevel;
     }
 }
 
