@@ -32,6 +32,8 @@ namespace echo_canceller
         private WaveOut waveOut = new WaveOut();
         private WaveBuffer waveBuffer = new WaveBuffer();
         public int volumeGain = 0;
+        private double cutVolume = 0;
+        private double micMeanVolume = 0;
         WaveFileWriter writer;
         AudioFileReader reader;
         BufferedWaveProvider bufferedWaveProvider;
@@ -92,7 +94,13 @@ namespace echo_canceller
         ~AudioHandler()
         {
         }
-
+        double GetVolume()
+        {
+            var devEnum = new MMDeviceEnumerator();
+            var device = devEnum.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia);
+            var masterVolume = device.AudioEndpointVolume.MasterVolumeLevelScalar;
+            return masterVolume;
+        }
 
         /// <summary>
         /// get input device list
@@ -255,6 +263,21 @@ namespace echo_canceller
 
         private void WaveMic_DataAvailable(object sender, WaveInEventArgs e)
         {
+            // store data and get mic volume 
+            byte[] rawData = e.Buffer;
+            int rawDataNum = e.BytesRecorded / 2;
+            var getData = new Int16[rawDataNum];
+            double mean = 0;
+            for (int i = 0; i < rawDataNum; i++)
+            {
+                // read the int16 from the two bytes
+                Int16 val = BitConverter.ToInt16(rawData, i * 2);
+                getData[i] = val;
+                mean += Math.Abs(val) / Math.Pow(2, SAMPLE_BIT);
+            }
+            micMeanVolume = mean / rawDataNum;
+            //Debug.WriteLine(Math.Abs(mean));
+
             switch (state)
             {
                 case STATE.RECORD:
@@ -266,21 +289,17 @@ namespace echo_canceller
                     bufferedWaveProvider.AddSamples(e.Buffer, 0, e.BytesRecorded);
                     break;
                 case STATE.WORK:
-                    byte[] rawData = e.Buffer;
-                    int rawDataNum = e.BytesRecorded / 2;
-                    var getData = new Int16[rawDataNum];
                     var convertData = new Int16[rawDataNum];
                     var convertRawData = new byte[e.BytesRecorded];
-                    // combineData
+                    // convert data
                     for (int i = 0; i < rawDataNum; i++)
                     {
-                        // read the int16 from the two bytes
-                        Int16 val = BitConverter.ToInt16(rawData, i * 2);
-                        //Debug.WriteLine(val);
                         // store the value in Ys as a percent (+/- 100% = 200%)
-                        getData[i] = val;
-                        //Debug.Write(val);
-                        convertData[i] = (Int16)(-1 * getData[i]);
+                        short data = (Int16)(-1 * getData[i]);
+                        if (Math.Abs(data) < cutVolume)
+                            convertData[i] = 1;
+                        else
+                            convertData[i] = data;
                         //Debug.WriteLine(" : " + convertData[i]);
                         var byteData = BitConverter.GetBytes(convertData[i]);
                         convertRawData[i * 2] = BitConverter.GetBytes(convertData[i])[0];
@@ -424,7 +443,7 @@ namespace echo_canceller
                     // read the int16 from the two bytes
                     Int16 val = BitConverter.ToInt16(audioBytes, i * 2);
                     // store the value in Ys as a percent (+/- 100% = 200%)
-                    pcm[i] = (double)(val) / Math.Pow(2, 16) * 200.0;
+                    pcm[i] = (double)(val) / Math.Pow(2, SAMPLE_BIT) * 200.0;
                 }
 
                 // calculate the full FFT
@@ -456,6 +475,17 @@ namespace echo_canceller
             return fft;
         }
 
-
+        /// <summary>
+        /// volume must be from 0.0 to 1.0
+        /// </summary>
+        /// <param name="volume"></param>
+        public void SetCutVolume(double volume)
+        {
+            cutVolume = volume * 100;
+        }
+        public double GetMicVolume()
+        {
+            return micMeanVolume / Math.Pow(2, SAMPLE_BIT) * 100000;
+        }
     }
 }

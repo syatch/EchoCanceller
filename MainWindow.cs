@@ -247,6 +247,8 @@ namespace echo_canceller
             timerReplot.Enabled = false;
             PlotLatestData();
             timerReplot.Enabled = true;
+
+            UpdateMicVolume();
         }
 
         public void PlotLatestData()
@@ -288,5 +290,19 @@ namespace echo_canceller
             needsAutoScaling = true;
         }
 
+        private void trackBarCutVolume_Scroll(object sender, EventArgs e)
+        {
+            AudioHandler.SetCutVolume((double)trackBarCutVolume.Value / trackBarCutVolume.Maximum);
+        }
+
+        private void UpdateMicVolume()
+        {
+            int value = (int)(AudioHandler.GetMicVolume() * 10000);
+            if (value < 0)
+                value = 0;
+            else if (1000 < value)
+                value = 1000;
+            progressBarCutVolume.Value = value;
+        }
     }
 }

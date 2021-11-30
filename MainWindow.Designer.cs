@@ -52,6 +52,10 @@
             this.timerReplot = new System.Windows.Forms.Timer(this.components);
             this.labeldriver = new System.Windows.Forms.Label();
             this.comboBoxDriver = new System.Windows.Forms.ComboBox();
+            this.trackBarCutVolume = new System.Windows.Forms.TrackBar();
+            this.labelCutVolume = new System.Windows.Forms.Label();
+            this.progressBarCutVolume = new System.Windows.Forms.ProgressBar();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarCutVolume)).BeginInit();
             this.SuspendLayout();
             // 
             // comboBoxMicrophone
@@ -302,12 +306,44 @@
             this.comboBoxDriver.TabIndex = 32;
             this.comboBoxDriver.SelectedIndexChanged += new System.EventHandler(this.comboBoxDriver_SelectedIndexChanged);
             // 
+            // trackBarCutVolume
+            // 
+            this.trackBarCutVolume.BackColor = System.Drawing.Color.Black;
+            this.trackBarCutVolume.Location = new System.Drawing.Point(18, 778);
+            this.trackBarCutVolume.Maximum = 1000;
+            this.trackBarCutVolume.Name = "trackBarCutVolume";
+            this.trackBarCutVolume.Size = new System.Drawing.Size(776, 90);
+            this.trackBarCutVolume.TabIndex = 33;
+            this.trackBarCutVolume.Scroll += new System.EventHandler(this.trackBarCutVolume_Scroll);
+            // 
+            // labelCutVolume
+            // 
+            this.labelCutVolume.AutoSize = true;
+            this.labelCutVolume.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelCutVolume.ForeColor = System.Drawing.SystemColors.InactiveBorder;
+            this.labelCutVolume.Location = new System.Drawing.Point(22, 725);
+            this.labelCutVolume.Name = "labelCutVolume";
+            this.labelCutVolume.Size = new System.Drawing.Size(294, 33);
+            this.labelCutVolume.TabIndex = 34;
+            this.labelCutVolume.Text = "Select Output Driver";
+            // 
+            // progressBarCutVolume
+            // 
+            this.progressBarCutVolume.Location = new System.Drawing.Point(42, 841);
+            this.progressBarCutVolume.Maximum = 1000;
+            this.progressBarCutVolume.Name = "progressBarCutVolume";
+            this.progressBarCutVolume.Size = new System.Drawing.Size(730, 27);
+            this.progressBarCutVolume.TabIndex = 35;
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.WindowText;
             this.ClientSize = new System.Drawing.Size(2631, 1426);
+            this.Controls.Add(this.progressBarCutVolume);
+            this.Controls.Add(this.labelCutVolume);
+            this.Controls.Add(this.trackBarCutVolume);
             this.Controls.Add(this.comboBoxDriver);
             this.Controls.Add(this.labeldriver);
             this.Controls.Add(this.formsPlotOutFFT);
@@ -332,6 +368,7 @@
             this.Controls.Add(this.comboBoxMicrophone);
             this.Name = "MainWindow";
             this.Text = "Simple Echo Canceller";
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarCutVolume)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -361,6 +398,9 @@
         private System.Windows.Forms.Timer timerReplot;
         private System.Windows.Forms.Label labeldriver;
         private System.Windows.Forms.ComboBox comboBoxDriver;
+        private System.Windows.Forms.TrackBar trackBarCutVolume;
+        private System.Windows.Forms.Label labelCutVolume;
+        private System.Windows.Forms.ProgressBar progressBarCutVolume;
     }
 }
 
