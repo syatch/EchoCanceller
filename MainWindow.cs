@@ -292,7 +292,8 @@ namespace echo_canceller
 
         private void trackBarCutVolume_Scroll(object sender, EventArgs e)
         {
-            AudioHandler.SetCutVolume((double)trackBarCutVolume.Value / trackBarCutVolume.Maximum);
+            numericUpDownCutVolume.Value = (decimal)trackBarCutVolume.Value / trackBarCutVolume.Maximum;
+            SetCutVolume();
         }
 
         private void UpdateMicVolume()
@@ -305,14 +306,35 @@ namespace echo_canceller
             progressBarCutVolume.Value = value;
         }
 
+        private void numericUpDownCutVolume_ValueChanged(object sender, EventArgs e)
+        {
+            trackBarCutVolume.Value = (int)(trackBarCutVolume.Maximum * numericUpDownCutVolume.Value);
+            SetCutVolume();
+        }
+
+        private void SetCutVolume()
+        {
+            AudioHandler.SetCutVolume((double)trackBarCutVolume.Value / trackBarCutVolume.Maximum);
+        }
+
         private void trackBarStereoInputLevel_Scroll(object sender, EventArgs e)
         {
-
+            numericUpDownInputLevel.Value = (decimal)trackBarStereoInputLevel.Value / trackBarStereoInputLevel.Maximum * numericUpDownInputLevel.Maximum;
+        }
+        private void numericUpDownInputLevel_ValueChanged(object sender, EventArgs e)
+        {
+            trackBarStereoInputLevel.Value = (int)(numericUpDownInputLevel.Value * 10);
         }
         private void trackBarOutputLevel_Scroll(object sender, EventArgs e)
         {
+            numericUpDownOutputLevel.Value = (decimal)trackBarOutputLevel.Value / trackBarOutputLevel.Maximum * numericUpDownOutputLevel.Maximum;
             AudioHandler.SetOutputLevel(trackBarOutputLevel.Value / 10.0);
         }
-
+        private void numericUpDownOutputLevel_ValueChanged(object sender, EventArgs e)
+        {
+            trackBarOutputLevel.Value = (int)(numericUpDownOutputLevel.Value / numericUpDownOutputLevel.Maximum * trackBarOutputLevel.Maximum);
+            Debug.WriteLine(trackBarOutputLevel.Value);
+            AudioHandler.SetOutputLevel(trackBarOutputLevel.Value / 10.0);
+        }
     }
 }

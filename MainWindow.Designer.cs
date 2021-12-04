@@ -59,9 +59,15 @@
             this.labelStereoInputVolume = new System.Windows.Forms.Label();
             this.labelOutputLevel = new System.Windows.Forms.Label();
             this.trackBarOutputLevel = new System.Windows.Forms.TrackBar();
+            this.numericUpDownCutVolume = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDownInputLevel = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDownOutputLevel = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarCutVolume)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarStereoInputLevel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarOutputLevel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCutVolume)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownInputLevel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownOutputLevel)).BeginInit();
             this.SuspendLayout();
             // 
             // comboBoxMicrophone
@@ -315,10 +321,12 @@
             // trackBarCutVolume
             // 
             this.trackBarCutVolume.BackColor = System.Drawing.Color.Black;
+            this.trackBarCutVolume.LargeChange = 10;
             this.trackBarCutVolume.Location = new System.Drawing.Point(18, 778);
-            this.trackBarCutVolume.Maximum = 1000;
+            this.trackBarCutVolume.Maximum = 100;
             this.trackBarCutVolume.Name = "trackBarCutVolume";
             this.trackBarCutVolume.Size = new System.Drawing.Size(776, 90);
+            this.trackBarCutVolume.SmallChange = 5;
             this.trackBarCutVolume.TabIndex = 33;
             this.trackBarCutVolume.Scroll += new System.EventHandler(this.trackBarCutVolume_Scroll);
             // 
@@ -386,12 +394,82 @@
             this.trackBarOutputLevel.Value = 10;
             this.trackBarOutputLevel.Scroll += new System.EventHandler(this.trackBarOutputLevel_Scroll);
             // 
+            // numericUpDownCutVolume
+            // 
+            this.numericUpDownCutVolume.DecimalPlaces = 2;
+            this.numericUpDownCutVolume.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+            this.numericUpDownCutVolume.Location = new System.Drawing.Point(652, 753);
+            this.numericUpDownCutVolume.Maximum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericUpDownCutVolume.Name = "numericUpDownCutVolume";
+            this.numericUpDownCutVolume.Size = new System.Drawing.Size(120, 31);
+            this.numericUpDownCutVolume.TabIndex = 41;
+            this.numericUpDownCutVolume.ValueChanged += new System.EventHandler(this.numericUpDownCutVolume_ValueChanged);
+            // 
+            // numericUpDownInputLevel
+            // 
+            this.numericUpDownInputLevel.DecimalPlaces = 2;
+            this.numericUpDownInputLevel.Increment = new decimal(new int[] {
+            2,
+            0,
+            0,
+            131072});
+            this.numericUpDownInputLevel.Location = new System.Drawing.Point(652, 920);
+            this.numericUpDownInputLevel.Maximum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.numericUpDownInputLevel.Name = "numericUpDownInputLevel";
+            this.numericUpDownInputLevel.Size = new System.Drawing.Size(120, 31);
+            this.numericUpDownInputLevel.TabIndex = 42;
+            this.numericUpDownInputLevel.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericUpDownInputLevel.ValueChanged += new System.EventHandler(this.numericUpDownInputLevel_ValueChanged);
+            // 
+            // numericUpDownOutputLevel
+            // 
+            this.numericUpDownOutputLevel.DecimalPlaces = 2;
+            this.numericUpDownOutputLevel.Increment = new decimal(new int[] {
+            2,
+            0,
+            0,
+            131072});
+            this.numericUpDownOutputLevel.Location = new System.Drawing.Point(652, 1058);
+            this.numericUpDownOutputLevel.Maximum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.numericUpDownOutputLevel.Name = "numericUpDownOutputLevel";
+            this.numericUpDownOutputLevel.Size = new System.Drawing.Size(120, 31);
+            this.numericUpDownOutputLevel.TabIndex = 43;
+            this.numericUpDownOutputLevel.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericUpDownOutputLevel.ValueChanged += new System.EventHandler(this.numericUpDownOutputLevel_ValueChanged);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.WindowText;
             this.ClientSize = new System.Drawing.Size(2631, 1426);
+            this.Controls.Add(this.numericUpDownOutputLevel);
+            this.Controls.Add(this.numericUpDownInputLevel);
+            this.Controls.Add(this.numericUpDownCutVolume);
             this.Controls.Add(this.trackBarOutputLevel);
             this.Controls.Add(this.labelOutputLevel);
             this.Controls.Add(this.labelStereoInputVolume);
@@ -426,6 +504,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.trackBarCutVolume)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarStereoInputLevel)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarOutputLevel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCutVolume)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownInputLevel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownOutputLevel)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -462,6 +543,9 @@
         private System.Windows.Forms.Label labelStereoInputVolume;
         private System.Windows.Forms.Label labelOutputLevel;
         private System.Windows.Forms.TrackBar trackBarOutputLevel;
+        private System.Windows.Forms.NumericUpDown numericUpDownCutVolume;
+        private System.Windows.Forms.NumericUpDown numericUpDownInputLevel;
+        private System.Windows.Forms.NumericUpDown numericUpDownOutputLevel;
     }
 }
 

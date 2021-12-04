@@ -246,6 +246,9 @@ namespace echo_canceller
 
             //一般的な44.1kHz, 16bit, ステレオサウンドの音源を想定
             bufferedWaveProvider = new BufferedWaveProvider(waveMic.WaveFormat);
+            bufferedWaveProvider.DiscardOnBufferOverflow = true;
+            bufferedWaveProviderOut = new BufferedWaveProvider(waveMic.WaveFormat);
+            bufferedWaveProviderOut.DiscardOnBufferOverflow = true;
             waveOut.DeviceNumber = outputDeviceIndex;
             waveOut.Init(bufferedWaveProvider);
             waveOut.Play();
@@ -262,6 +265,7 @@ namespace echo_canceller
             buffers.Clear();
             buffers.Add(bufferedWaveProviderMic);
             buffers.Add(bufferedWaveProviderStereo);
+            buffers.Add(bufferedWaveProviderOut);
         }
 
         private void WaveMic_DataAvailable(object sender, WaveInEventArgs e)
@@ -289,29 +293,46 @@ namespace echo_canceller
                     break;
                 case STATE.STREAM:
                     bufferedWaveProviderMic.AddSamples(e.Buffer, 0, e.BytesRecorded);
+                    bufferedWaveProviderOut.AddSamples(e.Buffer, 0, e.BytesRecorded);
                     bufferedWaveProvider.AddSamples(e.Buffer, 0, e.BytesRecorded);
                     break;
                 case STATE.WORK:
                     var convertData = new Int16[rawDataNum];
                     var convertRawData = new byte[e.BytesRecorded];
+                    var inputData = new Int16[rawDataNum];
+                    var inputRawData = new byte[e.BytesRecorded];
                     // convert data
                     for (int i = 0; i < rawDataNum; i++)
                     {
                         // store the value in Ys as a percent (+/- 100% = 200%)
-                        short data = (Int16)(-1 * getData[i] * outputLevel);
+                        short data = (Int16)(-1 * getData[i]);
                         //Debug.WriteLine(data);
                         if ((Math.Abs(data) < cutVolume) || (Math.Abs(data) == 0))
                             convertData[i] = 1;
                         else
                             convertData[i] = data;
-                        //Debug.WriteLine(" : " + convertData[i]);
-                        var byteData = BitConverter.GetBytes(convertData[i]);
+                        // save input data
+                        inputData[i] = convertData[i];
+                        // get input rawdata
+                        //var byteInputData = BitConverter.GetBytes(inputData[i]);
+                        inputRawData[i * 2] = BitConverter.GetBytes(inputData[i])[0];
+                        inputRawData[i * 2 + 1] = BitConverter.GetBytes(inputData[i])[1];
+
+
+
+                        // output level
+                        convertData[i] = (short)(convertData[i] * outputLevel);
+
+                        // Debug.WriteLine(" : " + convertData[i]);
+                        //var byteData = BitConverter.GetBytes(convertData[i]);
                         convertRawData[i * 2] = BitConverter.GetBytes(convertData[i])[0];
                         convertRawData[i * 2 + 1] = BitConverter.GetBytes(convertData[i])[1];
+
                     }
 
                     //bufferedWaveProviderMic.AddSamples(e.Buffer, 0, e.BytesRecorded);
-                    bufferedWaveProviderMic.AddSamples(convertRawData, 0, e.BytesRecorded);
+                    bufferedWaveProviderMic.AddSamples(inputRawData, 0, e.BytesRecorded);
+                    bufferedWaveProviderOut.AddSamples(convertRawData, 0, e.BytesRecorded);
                     bufferedWaveProvider.AddSamples(convertRawData, 0, e.BytesRecorded);
                     
                     break;
@@ -341,16 +362,7 @@ namespace echo_canceller
             waveStereo.StopRecording();
             waveStereo.StopRecording();
         }
-        /*
 
-        MultiplexingWaveProvider multiplexer;
-        AsioOut asioOut;
-        public List<BufferedWaveProvider> bufferst;
-        public int outputChannels = 6;
-        public int waveFormatSampleRate = 48000;
-        public int waveFormatBitDepth = 24;
-        public int waveFormatChannels = 2;
-*/
         public void StartWork()
         {
             waveMic.WaveFormat = new WaveFormat(SAMPLE_RATE, SAMPLE_BIT, 2);
@@ -358,7 +370,7 @@ namespace echo_canceller
             waveMic.DeviceNumber = micDeviceIndex;
             waveMic.BufferMilliseconds = (int)((double)BUFFERSIZE / (double)SAMPLE_RATE * 1000.0);
             waveMic.StartRecording();
-            // for stream
+            // for mic
             bufferedWaveProviderMic = new BufferedWaveProvider(waveMic.WaveFormat);
             bufferedWaveProviderMic.BufferLength = BUFFERSIZE * 2;
             bufferedWaveProviderMic.DiscardOnBufferOverflow = true;
@@ -374,6 +386,9 @@ namespace echo_canceller
             bufferedWaveProviderStereo.DiscardOnBufferOverflow = true;
 
             bufferedWaveProvider = new BufferedWaveProvider(waveMic.WaveFormat);
+            bufferedWaveProvider.DiscardOnBufferOverflow = true;
+            bufferedWaveProviderOut = new BufferedWaveProvider(waveMic.WaveFormat);
+            bufferedWaveProviderOut.DiscardOnBufferOverflow = true;
             waveOut.DeviceNumber = outputDeviceIndex;
             waveOut.Init(bufferedWaveProvider);
             waveOut.Play();
@@ -381,6 +396,7 @@ namespace echo_canceller
             buffers.Clear();
             buffers.Add(bufferedWaveProviderMic);
             buffers.Add(bufferedWaveProviderStereo);
+            buffers.Add(bufferedWaveProviderOut);
         }
 
         private string GetDanteDriverName()
