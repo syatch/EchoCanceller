@@ -293,8 +293,9 @@ namespace echo_canceller
                     break;
                 case STATE.STREAM:
                     bufferedWaveProviderMic.AddSamples(e.Buffer, 0, e.BytesRecorded);
-                    bufferedWaveProviderOut.AddSamples(e.Buffer, 0, e.BytesRecorded);
                     bufferedWaveProvider.AddSamples(e.Buffer, 0, e.BytesRecorded);
+                    bufferedWaveProviderOut.ClearBuffer();
+                    bufferedWaveProviderOut.AddSamples(e.Buffer, 0, e.BytesRecorded);
                     break;
                 case STATE.WORK:
                     var convertData = new Int16[rawDataNum];
@@ -311,8 +312,8 @@ namespace echo_canceller
                             convertData[i] = 1;
                         else
                             convertData[i] = data;
-                        // save input data
-                        inputData[i] = convertData[i];
+                        // input data
+                        inputData[i] = convertData[i];// * inputLevel;
                         // get input rawdata
                         //var byteInputData = BitConverter.GetBytes(inputData[i]);
                         inputRawData[i * 2] = BitConverter.GetBytes(inputData[i])[0];
@@ -332,9 +333,9 @@ namespace echo_canceller
 
                     //bufferedWaveProviderMic.AddSamples(e.Buffer, 0, e.BytesRecorded);
                     bufferedWaveProviderMic.AddSamples(inputRawData, 0, e.BytesRecorded);
-                    bufferedWaveProviderOut.AddSamples(convertRawData, 0, e.BytesRecorded);
                     bufferedWaveProvider.AddSamples(convertRawData, 0, e.BytesRecorded);
-                    
+                    bufferedWaveProviderOut.ClearBuffer();
+                    bufferedWaveProviderOut.AddSamples(convertRawData, 0, e.BytesRecorded);
                     break;
             }
 
