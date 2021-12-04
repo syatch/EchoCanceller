@@ -19,6 +19,14 @@ using System.Numerics;
 
 namespace echo_canceller
 {
+    class BufferHistory
+    {
+        List<byte[]> history;
+        public void AddBuffer(byte[] data)
+        {
+            history
+        }
+    }
     class AudioHandler
     {
         private int micDeviceIndex;
@@ -34,7 +42,7 @@ namespace echo_canceller
         public int volumeGain = 0;
         private double cutVolume = 0;
         private double micMeanVolume = 0;
-        private double inputStereoLevel = 1.0;
+        private double inputMicLevel = 1.0;
         private double outputLevel = 1.0;
         WaveFileWriter writer;
         AudioFileReader reader;
@@ -306,23 +314,28 @@ namespace echo_canceller
                     for (int i = 0; i < rawDataNum; i++)
                     {
                         // store the value in Ys as a percent (+/- 100% = 200%)
-                        short data = (Int16)(-1 * getData[i]);
+                        short data = (Int16)(getData[i]);
                         //Debug.WriteLine(data);
-                        if ((Math.Abs(data) < cutVolume) || (Math.Abs(data) == 0))
-                            convertData[i] = 1;
+                        if ((Math.Abs(data) < cutVolume))
+                            inputData[i] = 0;
                         else
-                            convertData[i] = data;
+                            inputData[i] = (short)(-data * inputMicLevel);
+
+                        if (inputData[i] == 0)
+                            inputData[i] = 1;
                         // input data
-                        inputData[i] = convertData[i];// * inputLevel;
+                        //inputData[i] = (short)(convertData[i]/* * inputStereoLevel*/);
                         // get input rawdata
                         //var byteInputData = BitConverter.GetBytes(inputData[i]);
                         inputRawData[i * 2] = BitConverter.GetBytes(inputData[i])[0];
                         inputRawData[i * 2 + 1] = BitConverter.GetBytes(inputData[i])[1];
 
 
-
                         // output level
-                        convertData[i] = (short)(convertData[i] * outputLevel);
+                        convertData[i] = (short)((data + inputData[i]) * outputLevel);
+
+                        if (Math.Abs(convertData[i]) == 0)
+                            convertData[i] = 1;
 
                         // Debug.WriteLine(" : " + convertData[i]);
                         //var byteData = BitConverter.GetBytes(convertData[i]);
@@ -340,7 +353,6 @@ namespace echo_canceller
             }
 
         }
-
         private void WaveStereo_DataAvailable(object sender, WaveInEventArgs e)
         {
             switch (state)
@@ -349,6 +361,15 @@ namespace echo_canceller
                     bufferedWaveProviderStereo.AddSamples(e.Buffer, 0, e.BytesRecorded);
                     break;
                 case STATE.WORK:
+                    byte[] rawData = e.Buffer;
+                    int rawDataNum = e.BytesRecorded / 2;
+                    var getData = new Int16[rawDataNum];
+                    for (int i = 0; i < rawDataNum; i++)
+                    {
+                        // read the int16 from the two bytes
+                        Int16 val = BitConverter.ToInt16(rawData, i * 2);
+                        getData[i] = val;
+                    }
                     bufferedWaveProviderStereo.AddSamples(e.Buffer, 0, e.BytesRecorded);
                     break;
             }
@@ -362,6 +383,11 @@ namespace echo_canceller
             waveOut.Stop();
             waveStereo.StopRecording();
             waveStereo.StopRecording();
+/*
+            bufferedWaveProviderMic.ClearBuffer();
+            bufferedWaveProviderStereo.ClearBuffer();
+            bufferedWaveProviderOut.ClearBuffer();
+            bufferedWaveProvider.ClearBuffer();*/
         }
 
         public void StartWork()
@@ -423,7 +449,6 @@ namespace echo_canceller
             waveStereo.StopRecording();
             waveOut.Stop();
             waveStereo.StopRecording();
-
         }
 
         public List<(double[], double)> GetPlotData()
@@ -510,7 +535,7 @@ namespace echo_canceller
         }
         public void SetInputStereoLevel(double level)
         {
-            inputStereoLevel = level;
+            inputMicLevel = level;
         }
         public void SetOutputLevel(double level)
         {

@@ -319,12 +319,15 @@ namespace echo_canceller
 
         private void trackBarStereoInputLevel_Scroll(object sender, EventArgs e)
         {
-            numericUpDownInputLevel.Value = (decimal)trackBarStereoInputLevel.Value / trackBarStereoInputLevel.Maximum * numericUpDownInputLevel.Maximum;
+            numericUpDownMicLevel.Value = (decimal)trackBarMicInputLevel.Value / trackBarMicInputLevel.Maximum * numericUpDownMicLevel.Maximum;
+            AudioHandler.SetInputStereoLevel(trackBarMicInputLevel.Value / 10.0);
         }
         private void numericUpDownInputLevel_ValueChanged(object sender, EventArgs e)
         {
-            trackBarStereoInputLevel.Value = (int)(numericUpDownInputLevel.Value * 10);
+            trackBarMicInputLevel.Value = (int)(numericUpDownMicLevel.Value * 10);
+            AudioHandler.SetInputStereoLevel(trackBarMicInputLevel.Value / 10.0);
         }
+
         private void trackBarOutputLevel_Scroll(object sender, EventArgs e)
         {
             numericUpDownOutputLevel.Value = (decimal)trackBarOutputLevel.Value / trackBarOutputLevel.Maximum * numericUpDownOutputLevel.Maximum;
@@ -333,7 +336,6 @@ namespace echo_canceller
         private void numericUpDownOutputLevel_ValueChanged(object sender, EventArgs e)
         {
             trackBarOutputLevel.Value = (int)(numericUpDownOutputLevel.Value / numericUpDownOutputLevel.Maximum * trackBarOutputLevel.Maximum);
-            Debug.WriteLine(trackBarOutputLevel.Value);
             AudioHandler.SetOutputLevel(trackBarOutputLevel.Value / 10.0);
         }
     }

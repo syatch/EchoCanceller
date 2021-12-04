@@ -55,18 +55,18 @@
             this.trackBarCutVolume = new System.Windows.Forms.TrackBar();
             this.labelCutVolume = new System.Windows.Forms.Label();
             this.progressBarCutVolume = new System.Windows.Forms.ProgressBar();
-            this.trackBarStereoInputLevel = new System.Windows.Forms.TrackBar();
-            this.labelStereoInputVolume = new System.Windows.Forms.Label();
+            this.trackBarMicInputLevel = new System.Windows.Forms.TrackBar();
+            this.labelMicInputVolume = new System.Windows.Forms.Label();
             this.labelOutputLevel = new System.Windows.Forms.Label();
             this.trackBarOutputLevel = new System.Windows.Forms.TrackBar();
             this.numericUpDownCutVolume = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDownInputLevel = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDownMicLevel = new System.Windows.Forms.NumericUpDown();
             this.numericUpDownOutputLevel = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarCutVolume)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBarStereoInputLevel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarMicInputLevel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarOutputLevel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCutVolume)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownInputLevel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMicLevel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownOutputLevel)).BeginInit();
             this.SuspendLayout();
             // 
@@ -350,27 +350,27 @@
             this.progressBarCutVolume.Size = new System.Drawing.Size(730, 27);
             this.progressBarCutVolume.TabIndex = 35;
             // 
-            // trackBarStereoInputLevel
+            // trackBarMicInputLevel
             // 
-            this.trackBarStereoInputLevel.BackColor = System.Drawing.Color.Black;
-            this.trackBarStereoInputLevel.Location = new System.Drawing.Point(18, 944);
-            this.trackBarStereoInputLevel.Maximum = 50;
-            this.trackBarStereoInputLevel.Name = "trackBarStereoInputLevel";
-            this.trackBarStereoInputLevel.Size = new System.Drawing.Size(776, 90);
-            this.trackBarStereoInputLevel.TabIndex = 36;
-            this.trackBarStereoInputLevel.Value = 10;
-            this.trackBarStereoInputLevel.Scroll += new System.EventHandler(this.trackBarStereoInputLevel_Scroll);
+            this.trackBarMicInputLevel.BackColor = System.Drawing.Color.Black;
+            this.trackBarMicInputLevel.Location = new System.Drawing.Point(18, 944);
+            this.trackBarMicInputLevel.Maximum = 50;
+            this.trackBarMicInputLevel.Name = "trackBarMicInputLevel";
+            this.trackBarMicInputLevel.Size = new System.Drawing.Size(776, 90);
+            this.trackBarMicInputLevel.TabIndex = 36;
+            this.trackBarMicInputLevel.Value = 10;
+            this.trackBarMicInputLevel.Scroll += new System.EventHandler(this.trackBarStereoInputLevel_Scroll);
             // 
-            // labelStereoInputVolume
+            // labelMicInputVolume
             // 
-            this.labelStereoInputVolume.AutoSize = true;
-            this.labelStereoInputVolume.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelStereoInputVolume.ForeColor = System.Drawing.SystemColors.InactiveBorder;
-            this.labelStereoInputVolume.Location = new System.Drawing.Point(22, 896);
-            this.labelStereoInputVolume.Name = "labelStereoInputVolume";
-            this.labelStereoInputVolume.Size = new System.Drawing.Size(262, 33);
-            this.labelStereoInputVolume.TabIndex = 37;
-            this.labelStereoInputVolume.Text = "Stereo Input Level";
+            this.labelMicInputVolume.AutoSize = true;
+            this.labelMicInputVolume.Font = new System.Drawing.Font("MS UI Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelMicInputVolume.ForeColor = System.Drawing.SystemColors.InactiveBorder;
+            this.labelMicInputVolume.Location = new System.Drawing.Point(22, 896);
+            this.labelMicInputVolume.Name = "labelMicInputVolume";
+            this.labelMicInputVolume.Size = new System.Drawing.Size(220, 33);
+            this.labelMicInputVolume.TabIndex = 37;
+            this.labelMicInputVolume.Text = "Mic Input Level";
             // 
             // labelOutputLevel
             // 
@@ -413,29 +413,29 @@
             this.numericUpDownCutVolume.TabIndex = 41;
             this.numericUpDownCutVolume.ValueChanged += new System.EventHandler(this.numericUpDownCutVolume_ValueChanged);
             // 
-            // numericUpDownInputLevel
+            // numericUpDownMicLevel
             // 
-            this.numericUpDownInputLevel.DecimalPlaces = 2;
-            this.numericUpDownInputLevel.Increment = new decimal(new int[] {
+            this.numericUpDownMicLevel.DecimalPlaces = 2;
+            this.numericUpDownMicLevel.Increment = new decimal(new int[] {
             2,
             0,
             0,
             131072});
-            this.numericUpDownInputLevel.Location = new System.Drawing.Point(652, 920);
-            this.numericUpDownInputLevel.Maximum = new decimal(new int[] {
+            this.numericUpDownMicLevel.Location = new System.Drawing.Point(652, 920);
+            this.numericUpDownMicLevel.Maximum = new decimal(new int[] {
             5,
             0,
             0,
             0});
-            this.numericUpDownInputLevel.Name = "numericUpDownInputLevel";
-            this.numericUpDownInputLevel.Size = new System.Drawing.Size(120, 31);
-            this.numericUpDownInputLevel.TabIndex = 42;
-            this.numericUpDownInputLevel.Value = new decimal(new int[] {
+            this.numericUpDownMicLevel.Name = "numericUpDownMicLevel";
+            this.numericUpDownMicLevel.Size = new System.Drawing.Size(120, 31);
+            this.numericUpDownMicLevel.TabIndex = 42;
+            this.numericUpDownMicLevel.Value = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            this.numericUpDownInputLevel.ValueChanged += new System.EventHandler(this.numericUpDownInputLevel_ValueChanged);
+            this.numericUpDownMicLevel.ValueChanged += new System.EventHandler(this.numericUpDownInputLevel_ValueChanged);
             // 
             // numericUpDownOutputLevel
             // 
@@ -468,12 +468,12 @@
             this.BackColor = System.Drawing.SystemColors.WindowText;
             this.ClientSize = new System.Drawing.Size(2631, 1426);
             this.Controls.Add(this.numericUpDownOutputLevel);
-            this.Controls.Add(this.numericUpDownInputLevel);
+            this.Controls.Add(this.numericUpDownMicLevel);
             this.Controls.Add(this.numericUpDownCutVolume);
             this.Controls.Add(this.trackBarOutputLevel);
             this.Controls.Add(this.labelOutputLevel);
-            this.Controls.Add(this.labelStereoInputVolume);
-            this.Controls.Add(this.trackBarStereoInputLevel);
+            this.Controls.Add(this.labelMicInputVolume);
+            this.Controls.Add(this.trackBarMicInputLevel);
             this.Controls.Add(this.progressBarCutVolume);
             this.Controls.Add(this.labelCutVolume);
             this.Controls.Add(this.trackBarCutVolume);
@@ -502,10 +502,10 @@
             this.Name = "MainWindow";
             this.Text = "Simple Echo Canceller";
             ((System.ComponentModel.ISupportInitialize)(this.trackBarCutVolume)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBarStereoInputLevel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarMicInputLevel)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarOutputLevel)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCutVolume)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownInputLevel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMicLevel)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownOutputLevel)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -539,12 +539,12 @@
         private System.Windows.Forms.TrackBar trackBarCutVolume;
         private System.Windows.Forms.Label labelCutVolume;
         private System.Windows.Forms.ProgressBar progressBarCutVolume;
-        private System.Windows.Forms.TrackBar trackBarStereoInputLevel;
-        private System.Windows.Forms.Label labelStereoInputVolume;
+        private System.Windows.Forms.TrackBar trackBarMicInputLevel;
+        private System.Windows.Forms.Label labelMicInputVolume;
         private System.Windows.Forms.Label labelOutputLevel;
         private System.Windows.Forms.TrackBar trackBarOutputLevel;
         private System.Windows.Forms.NumericUpDown numericUpDownCutVolume;
-        private System.Windows.Forms.NumericUpDown numericUpDownInputLevel;
+        private System.Windows.Forms.NumericUpDown numericUpDownMicLevel;
         private System.Windows.Forms.NumericUpDown numericUpDownOutputLevel;
     }
 }
